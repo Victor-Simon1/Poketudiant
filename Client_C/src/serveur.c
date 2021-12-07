@@ -22,8 +22,8 @@
 int refresh(char texte[20]){
 
     SDL_Log("refresh");
+    nbServeur = 0;
 
-/*
     Client clt = client_create_udp("", 9000); 
     strcpy(clt->buffer_send, "looking for poketudiant servers");
 
@@ -49,7 +49,7 @@ int refresh(char texte[20]){
    if(FD_ISSET((clt->socket, readfs)){// données recu
         n = clt->client_receive(clt, clt->buffer_recv, SIZE-1);
         clt->buffer_recv[n] = '\0';
-
+        printf("-----------receive : %s\n", buffer_recv);
         if(n == 0)
             SDL_Log("serveur down");
         else{
@@ -61,28 +61,20 @@ int refresh(char texte[20]){
             }
             if ((host = gethostbyname(hostbuffer)) != NULL){
                 for (adr = (struct in_addr **)host->h_addr_list; *adr; adr++)
-                    printf("IP : %s\n", inet_ntoa(**adr)); 
-                    nbServeur++;               
+                    SDL_Log("IP : %s", inet_ntoa(**adr)); 
+                    nbServeur++;   
+                    listeServeur = createServeur(inet_ntoa(**adr));   
+                    listeTexte = ajouterTeteTexte(listeTexte, createTexte(inet_ntoa(**adr), 50, 250));         
             }
 
         }
 
-
-        printf("-----------receive : %s\n", buffer_recv);
+        
    }
 
-
    client_close_and_free(clt);
-
-
-
-
-
-
-
-*/
-    nbServeur = 0;
-
+/*
+    
     // reset la liste des serveurs
     destroyServeurs(listeServeur);
     listeServeur = createServeur("172.31.129.186");
@@ -92,6 +84,8 @@ int refresh(char texte[20]){
     listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.186", 50, 200));
     listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.187", 50, 250));
     nbServeur = 2;
+*/
+
     return 1;
 }
 
@@ -147,14 +141,20 @@ void joinServeur(){
     }
 
     destroyServeurs(listeServeur);
-    
     listeServeur = createServeur(ipTemp);
- 
+
+    // création du client TCP
+    clientTCP = client_create_tcp(ipTemp, 9001);
+    // connexion
+    if(connect(player->socket,&player->clientAddr,player->len)==-1){
+        printf("pas connecté\n");
+        exit(1);
+    }
+    SDL_Log("connecté à : %s", ipTemp);
+    
+    // passe a l'ecran des parties
     choix = 0;
     changeAffichage("PARTIE");
-
-    
-    
     refreshGame();
 
 }
@@ -209,7 +209,7 @@ int loadServeur(){
                                                                                                 game.ecran.camera.h/2 , 
                                                                                                 150, 50, 
                                                                                                 &refresh,
-                                                                                                "SERVEUR");
+                                                                                                "");
     
    ButtonRefresh->box.x -= ButtonRefresh->box.w/2;
    ButtonRefresh->box.y -= ButtonRefresh->box.h/2;

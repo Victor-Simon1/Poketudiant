@@ -26,11 +26,11 @@ SDL_Texture *textPartie; // texture pour le titre du menu
 
 void refreshGame();
 void newPartie(char text[50]);
-void joinPartie(char[50]);
+void joinPartie(char text[50]);
 
 
-Parties createPartie();
-Parties ajouterTeteTexte(Parties liste, Parties p);
+Parties createPartie(char name[50]);
+Parties ajouterTetePartie(Parties liste, Parties p);
 void destroyParties(Parties p);
 
 

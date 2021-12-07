@@ -19,7 +19,7 @@ void refreshGame(){
     // detruit la liste de texte
     listeTexte = destroyTextes(listeTexte);
 
-    // demande la lite des games
+    // demande la liste des games
     strcpy(clientTCP->buffer_send, "require game list\n");
     clientTCP->client_send(clientTCP, clientTCP->buffer_send);
     printf("========== send : %s\n", clientTCP->buffer_send);
@@ -56,9 +56,12 @@ void refreshGame(){
                 printf("ici");
                 p = strtok(NULL, sep);
             }
+            // ajout au serveur !!!!!!!!!!!!!!!!!!!!!!!!
+            listeTexte = ajouterTeteTexte(listeTexte, createTexte(clientTCP->buffer_recv, 50, 200));
         }
-        listeTexte = ajouterTeteTexte(listeTexte, createTexte(clientTCP->buffer_recv, 50, 200));
     }
+    
+    nbPartie = nbGame;
     
 }
 
@@ -70,20 +73,42 @@ void newPartie(char text[50]){
     scanf("%s", nom);
 
     //envoie au serveur 
-
+    strcpy(clientTCP->buffer_send, "create game ");
+    strcat(clientTCP->buffer_send, nom);
+    clientTCP->client_send(clt, clientTCP->buffer_send);
 
 }
 
 // rejoins une partie et informe le serveur
-void joinPartie(char[50]){
+void joinPartie(char text[50]){
+    Parties temp = listeServeur->listePartie;
+    int cpt = 0;
+    char pnom;
+
+    while(temp){
+        if(cpt == choix){
+            strcpy(pnom, temp->nom);
+            break;
+        }
+        cpt++;
+        temp = temp->suiv;
+    }
+
+    destroyParties(listeServeur->listePartie);
+    listeServeur->listePartie = ajouterTetePartie(listeServeur->listePartie, createPartie(pnom));
+
+    //envoie au serveur 
+    strcpy(clientTCP->buffer_send, "join game ");
+    strcat(clientTCP->buffer_send, pnom);
+    clientTCP->client_send(clt, clientTCP->buffer_send);
 
 }
 
-Parties createPartie(){
+Parties createPartie(char name[50]){
 
     Parties game = (Partie*)malloc(sizeof(Partie));
 
-    strcpy(game->nom, "game_name");
+    strcpy(game->nom, name);
     game->nbJoueur = 0;
     game->maxJoueur = 0;
     game->nbLigne = 0;
@@ -93,7 +118,7 @@ Parties createPartie(){
     return game;
 }
 
-Parties ajouterTeteTexte(Parties liste, Parties p){  // ajoute un texte a une liste de texte
+Parties ajouterTetePartie(Parties liste, Parties p){  // ajoute un texte a une liste de texte
 
     p->suiv = liste;
     liste = p;

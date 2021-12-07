@@ -13,6 +13,7 @@
 #include "load.h"
 #include "menu.h"
 #include "serveur.h"
+#include "client.h"
 
 
 
@@ -142,6 +143,9 @@ int main(int argc, char **argv){
     SDL_Quit();
     TTF_Quit();
     Mix_CloseAudio();
+
+    // ============= client =============
+    client_close_and_free(clientTCP);
 
     // ============= font ==============
     TTF_CloseFont(police);
