@@ -144,13 +144,16 @@ public class Pokaimone {
 			return k *(this.attaque / def.defense ) * make_attack2(def.type);
 		}
 	}
-	private void addXp() {
-		double diff;
-		if(500 *((1+lvl)/2) > this.xp) {
-			lvl++;
-			diff = this.xp - 500 *((1+lvl)/2);
-			this.xp = diff;
+	public void setXp(double Xp){
+		this.Xp = Xp
+		if(this.Xp > this.xpMax){
+			this.Xp = this.Xp - this.xpMax;
+			this.lvl++;
 		}
+
+	}
+	public double getXp(){
+		return this.Xp;
 	}
 
 	private double setXPMax(){
