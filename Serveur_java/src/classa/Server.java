@@ -58,6 +58,7 @@ public class Server implements Communicate, Runnable, Closeable {
 		}
 		
 	}
+	
 	public Server() {
 		try {
 			
@@ -157,6 +158,8 @@ public class Server implements Communicate, Runnable, Closeable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//Map map = new Map();
+	
 
 	}
 

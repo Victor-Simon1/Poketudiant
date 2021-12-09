@@ -14,9 +14,15 @@ public class Pokaimone {
 	private int pvMax;
 	private int pv;
 	private double xp;
+	private double xpMax;
 	private int lvl;
 	private Attack attack1;
 	private Attack attack2;
+	private Combat combat;
+	protected int timer;
+	private int x;
+	private int y;
+	private Pokaimone[] pok;
 	public Pokaimone(String pName,Type pType,boolean pIsCatchable,String pEvolution
 			,int pAttaque,int pDefense, int pPvMax) {
 		
@@ -25,7 +31,7 @@ public class Pokaimone {
 		this.type = pType;
 		this.isCatchable = pIsCatchable;
 		this.evolution = pEvolution;
-		this.team = new Teams(this);
+		//this.team = new Teams(this);
 		this.attaque = applyCoeff(pAttaque);
 		this.defense = applyCoeff(pDefense);
 		this.pvMax = applyCoeff(pPvMax);
@@ -35,14 +41,22 @@ public class Pokaimone {
 		
 		this.lvl = 1;
 		this.xp = 0;
-		
+		this.xpMax = setXPMax();
+		this.pok = new Pokaimone[2];
+
 	}
 	
 	private int applyCoeff(int stats){
 		return (int)(0.9 + Math.random() *(1.1 -0.9)) * stats;
 	}
 	
-	
+	public boolean collidePoketudiant(Pokaimone p) {
+		boolean collide = false;
+		if(p.getX() == this.getX() && p.getY() == this.getY()) {
+			collide = true;
+		}
+		return collide;
+	}
 	private void capturePokaimone(Pokaimone p) {
 		if(this.type == Type.TEACHER) {
 			if(this.team.pok1 == null) {
@@ -74,9 +88,14 @@ public class Pokaimone {
 	private void chooseattack2(){
 		int random = 0;
 		random = (int) (0 + Math.random() * (attack1.ordinal() -0)) ;
-		while(this.type != Attack.values()[random].type && Attack.values()[random].type != Type.TEACHER ) {
-			random = (int) (0 + Math.random() * (attack1.ordinal() -0)) ;
+		
+		if(if(this.type != Type.TEACHER) {
+			while(this.type == Attack.values()[random].type ) {
+				random = (int) (0 + Math.random() * (attack1.ordinal() -0)) ;
+				//System.out.println("BOUVLE PTN");
+			}
 		}
+		
 		this.attack1 = Attack.values()[random];
 	}
 	
@@ -132,5 +151,46 @@ public class Pokaimone {
 			diff = this.xp - 500 *((1+lvl)/2);
 			this.xp = diff;
 		}
+	}
+
+	private double setXPMax(){
+		return 500 * ((1+ this.lvl) /2);
+	}
+	public boolean attemptCatch(Pokaimone p){
+		int random = myRandom(0,100);
+		int probaCatch = 2 * Math.max(0.5 -P.getPv()/p.getpvMax(),0);
+
+		return random <probaCatch;
+	}
+	
+	public boolean tentativeFuite(Pokaimone p){
+		boolean fuite = true;
+		int probaFuite = myRandom(0,100);
+		if(this.lvl< p.getLvl()-3)fuite = false;
+		else if(this.lvl< p.getLvl()-2)if(probaFuite<25)fuite = false;
+		else if(this.lvl< p.getLvl()-2)if(probaFuite<40)fuite = false;
+		else if(probaFuite<50)fuite = false;
+
+		return fuite;
+	}
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public void setCombat(Combat c) {
+		// TODO Auto-generated method stub
+		this.combat = c;
 	}
 }

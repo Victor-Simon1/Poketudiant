@@ -3,10 +3,9 @@ package classa;
 
 
 public class Combat {
-    private Players p1;
-    private Players p2;
-    private Pokaimone pok1;
-    private Pokaimone pok2;
+    private Pokaimone p1;
+    private Pokaimone p2;
+
     private String actionP1;
     private String actionp2;
 	public String getActionP1() {
@@ -25,18 +24,18 @@ public class Combat {
 		this.actionp2 = actionp2;
 	}
 
-	public Combat(Players p1, Players p2) {
+	public Combat(Pokaimone pokaimone, Pokaimone pokaimone2) {
 		// TODO Auto-generated constructor stub
-		this.p1 = p1;
-		this.p2 = p2;
-		pok1 = p1.getPokPrinc();
-		pok2 = p2.getPokPrinc();
+		this.p1 = pokaimone;
+		this.p2 = pokaimone2;
 	}
 
-	public Players getP1() {
+	public Pokaimone getP1() {
 		// TODO Auto-generated method stub
 		return p1;
 	}
+
+	
 	
 	
 }
