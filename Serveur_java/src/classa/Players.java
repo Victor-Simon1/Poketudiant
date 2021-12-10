@@ -13,7 +13,7 @@ public class Players  extends Thread implements Runnable{
     private boolean inGame;//dans une game
     private Game game;// game ou est le client
     private Pokaimone pokPrinc;
-
+    private Teams team;
     private Combat combat;
 
     //Constructeur
@@ -22,7 +22,7 @@ public class Players  extends Thread implements Runnable{
         this.serv = serv;
         this.inGame = false;
         this.game = null;
-
+        
         //this.pokPrinc = new Pokaimone("name",Type.TEACHER,false,"No",100,100,100);
 
         try {
@@ -79,13 +79,22 @@ public class Players  extends Thread implements Runnable{
     	String team = null;
     	this.writeClient("team contains " + this.pokPrinc.getPok().length +1 );
     	team += this.pokPrinc.getName() + this.pokPrinc.getType() + this.pokPrinc.getLvl() + this.pokPrinc.getXp() + this.pokPrinc.getXpMax() + this.pokPrinc.getPv() + this.pokPrinc.getPvMax() + this.pokPrinc.getAttaque() + this.pokPrinc.getDefense() + this.pokPrinc.getAttack1().name()+ this.pokPrinc.getAttack1().name(); 
+    	/*
     	for(int i = 0;i< this.pokPrinc.getPok().length;i++) {
     		team += this.pokPrinc.getPok()[i].getName() + this.pokPrinc.getPok()[i].getType() + this.pokPrinc.getPok()[i].getLvl() + this.pokPrinc.getPok()[i].getXp() +this.pokPrinc.getPok()[i].getXpMax() + this.pokPrinc.getPok()[i].getPv() +this.pokPrinc.getPok()[i].getPvMax() + this.pokPrinc.getPok()[i].getAttaque() + this.pokPrinc.getPok()[i].getDefense() +this.pokPrinc.getPok()[i].getAttack1().name()+ this.pokPrinc.getPok()[i].getAttack1().name(); 
+    	}*/
+    	if(this.getTeam().pok1!= null) {
+        	team += this.getTeam().pok1.getName() + this.getTeam().pok1.getType() + this.getTeam().pok1.getLvl() + this.getTeam().pok1.getXp() + this.getTeam().pok1.getXpMax() + this.getTeam().pok1.getPv() + this.getTeam().pok1.getPvMax() + this.getTeam().pok1.getAttaque() + this.getTeam().pok1.getDefense() + this.getTeam().pok1.getAttack1().name()+ this.getTeam().pok1.getAttack1().name(); 
+        	team += '\n';
+        	if(this.getTeam().pok2 != null) {
+            	team += this.getTeam().pok2.getName() +this.getTeam().pok2.getType() + this.getTeam().pok2.getLvl() + this.getTeam().pok2.getXp() + this.getTeam().pok2.getXpMax() + this.getTeam().pok2.getPv() + this.getTeam().pok2.getPvMax() +this.getTeam().pok2.getAttaque() + this.getTeam().pok2.getDefense() + this.getTeam().pok2.getAttack1().name()+ this.getTeam().pok2.getAttack1().name(); 
+            	team +='\n';
+        	}
+        	
     	}
     	this.writeClient(team);
     }
     public void run(){//fonction du thread
-        System.out.println("ICI");
         String str = new String();
         String game_info = new String();
         String info[];
@@ -129,7 +138,8 @@ public class Players  extends Thread implements Runnable{
                                 
                                  this.inGame = true;
                                  this.pokPrinc = new Pokaimone("name",Type.TEACHER,false,"No",100,100,100);
-
+                                 this.team = new Teams(new Pokaimone("name",Type.TEACHER,false,"No",100,100,100));
+                              
                                  this.writeClient("game created");
                            
                                  this.writeClient("map "+ this.game.getMap().getLine()+ " "+ this.game.getMap().getColumn() );
@@ -189,16 +199,59 @@ public class Players  extends Thread implements Runnable{
                     	}
                     }
                     else if(str.contains("poketudiant")&& str.contains("move up")) {
-                    	
+                    	info = str.split(" ");
+                    	int x = info[1].charAt(0);
+                    	if(this.team.echanger(x, x-1) ) {
+                    		
+                    	}
+                    	else {
+                    		
+                    	}
+                    	/*
+                    	if(this.team.placeEns == x) {
+                    		this.team.placeEns = x-1;
+                    		if(this.team.placePok1 == x-1) {
+                    			this.team.placePok1 = x-1;
+                    		}
+                    		if(this.team.placePok2 == x-1) {
+                    			this.team.placePok2 = x-1;
+                    		}
+                    	}
+                    	else if(this.team.placePok1 == x) {
+                    		this.team.placePok1 = x-1;
+                    		if(this.team.placeEns == x-1) {
+                    			this.team.placeEns = x-1;
+                    		}
+                    		if(this.team.placePok2 == x-1) {
+                    			this.team.placePok2 = x-1;
+                    		}
+                    	}
+                    	else if(this.team.placePok2 == x) {
+                    		this.team.placePok2 = x-1;
+                    		if(this.team.placePok1 == x-1) {
+                    			this.team.placePok1 = x-1;
+                    		}
+                    		if(this.team.placeEns == x-1) {
+                    			this.team.placeEns = x-1;
+                    		}
+                    	}
+                    	*/
                     }
                     else if(str.contains("poketudiant")&& str.contains("move down")) {
-                    	
+                    	info = str.split(" ");
+                    	int x = info[1].charAt(0);
+                    	if(this.team.echanger(x, x+1) ) {
+                    		
+                    	}
+                    	else {
+                    		
+                    	}
                     }
                     else if(str.contains("poketudiant")&& str.contains("free")) {
                     	
                     }
                     else if(str.contains("encounter action attack1")) {
-                    	if(this.getPokPrinc() == this.combat.getP1()) {
+                    	if(this == this.combat.getPlayer1()) {
                     		this.combat.setActionP1("attack1");
                     	}
                     	else {
@@ -206,7 +259,7 @@ public class Players  extends Thread implements Runnable{
                     	}
                     }
                     else if(str.contains("encounter action attack2")) {
-                    	if(this.getPokPrinc() == this.combat.getP1()) {
+                    	if(this == this.combat.getPlayer1()) {
                     		this.combat.setActionP1("attack2");
                     	}
                     	else {
@@ -214,7 +267,7 @@ public class Players  extends Thread implements Runnable{
                     	}
                     }
                     else if(str.contains("ecounter action switch")) {
-                    	if(this.getPokPrinc() == this.combat.getP1()) {
+                    	if(this== this.combat.getPlayer1()) {
                     		this.combat.setActionP1("switch");
                     	}
                     	else {
@@ -222,7 +275,7 @@ public class Players  extends Thread implements Runnable{
                     	}
                     }
                     else if(str.contains("encounter action catch")) {
-                    	if(this.getPokPrinc() == this.combat.getP1()) {
+                    	if(this == this.combat.getPlayer1()) {
                     		this.combat.setActionP1("catch");
                     	}
                     	else {
@@ -230,7 +283,7 @@ public class Players  extends Thread implements Runnable{
                     	}
                     }
                     else if(str.contains("encounter action leave")) {
-                    	if(this.getPokPrinc() == this.combat.getP1()) {
+                    	if(this == this.combat.getPlayer1()) {
                     		this.combat.setActionP1("leave");
                     	}
                     	else {
@@ -238,7 +291,7 @@ public class Players  extends Thread implements Runnable{
                     	}
                     }
                     else if(str.contains("encounter poketudiant index")) {
-                    	if(this.getPokPrinc() == this.combat.getP1()) {
+                    	if(this == this.combat.getPlayer1()) {
                     		this.combat.setActionP1("switch");
                     	}
                     	else {
@@ -300,76 +353,22 @@ public class Players  extends Thread implements Runnable{
              e.printStackTrace();
         }
         
-        /*
-        else if(){//envoie la carte
-            writer.println("map "+ game.getMap().getNbLines() );
-        }*/
-        /*
-        try {
-            if(this.serv.getListGame().size()  == 0){
-                writer.println("no game\n");
-            }
-            else{
-                //writer.println(nb_games + " games");
-                game_name += ( "games "+ this.serv.getListGame().size() + "\n");
-                for(int j = 0;j<this.serv.getListGame().size();j++){
-                    game_name += this.serv.getListGame().get(j).getName();
-                    game_name += "\n";
-                    game_name += this.serv.getListGame().get(j).getNbPlayer();
-                    game_name += "\n";
-                
-                }
-                System.out.println("Envoie :" + game_name);
-                writer.println(game_name);
-            }
-            String str = new String();
-            for(;;){
-                str = reader.readLine();
-                System.out.println("Receive d " + str);
-                if(str.contains("created game")){
-                    writer.println("game created");
-                    info = str.split(",");
-                    Game g = new Game(info[1],Integer.parseInt(info[2]),Integer.parseInt(info[3]));
-                    this.game = g;
-                    this.game.setNbPlayer(this.game.getNbPlayer()+1);
-                    g.joinGame(this);
-                    this.serv.setListGame(g);
-                    this.inGame = true;
-                    
-                }
-                else if (str.contains("join game")){
-                    //str = str.substring("join game ".length(), str.length());
-                    info = str.split(",");
-                    for(int i=0; i < this.serv.getListGame().size();i++){
-                        System.out.println(info[1]  + " " +info[1].length());
-                        System.out.println(this.serv.getListGame().get(i).getName() + " " + this.serv.getListGame().get(i).getName().length());
-                        if(compareString(info[1],this.serv.getListGame().get(i).getName()) == true){
-                            this.game =  this.serv.getListGame().get(i);
-                            this.game.setNbPlayer(this.game.getNbPlayer()+1);
-                            this.serv.getListGame().get(i).joinGame(this); 
-                            this.inGame = true;
-                            
-                        }
-                    }
-                }
-    
-                if(inGame && game.gameIsReady(this) && game.roundIsReady()){
-                    System.out.println("Ready");
-                    game.protocolGamePlayer(this);
-                }
-                else  System.out.println("Not Ready");
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-       */
     }
 	public Pokaimone getPokPrinc() {
 		return pokPrinc;
 	}
 	public void setPokPrinc(Pokaimone pokPrinc) {
 		this.pokPrinc = pokPrinc;
+	}
+
+
+	public Teams getTeam() {
+		return team;
+	}
+
+
+	public void setTeam(Teams team) {
+		this.team = team;
 	}
 
 

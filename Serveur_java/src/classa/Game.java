@@ -18,7 +18,7 @@ public class Game extends Thread {
 
 	private boolean isReady; //si la game est pretre
 	private int nbMaxPokaimone;
-	
+	private ArrayList<Combat> listCombat;
 	
 	private Map map;
 	private Map mapPlayers;
@@ -28,6 +28,7 @@ public class Game extends Thread {
     	this.name = name;
     	this.listPlayers = new ArrayList<Players>();
     	this.listPokaimone = new ArrayList<Pokaimone>();
+    	this.listCombat = new ArrayList<Combat>();
 		this.isReady = false;
 		this.nb_player = 0;
 		this.map = new Map();
@@ -39,6 +40,14 @@ public class Game extends Thread {
 		for(;;) {
 			//this.listPlayers.forEach(n -> System.out.println(n.ge));
 			this.verifyPokaimone();
+			this.listCombat.forEach(n-> {
+				if(n.getPlayer2() == null) {
+					n.deroulementCombat1Pok();
+				}
+				else {
+					n.deroulementCombat2Pok();
+				}
+			});
 		}
 		
 	}
@@ -98,20 +107,21 @@ public class Game extends Thread {
     			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
+    					Combat c = new Combat(p,this.listPlayers.get(nbP));
         				p.setCombat(c);
         				this.listPlayers.get(nbP).setCombat(c);
         				p.writeClient("encounter new rival " + 1 );
         				this.listPlayers.get(nbP).writeClient("encounter new rival " + 1 );
+        				this.listCombat.add(c);
         			}
     			}
     			for(int nbPok=0;nbPok<this.listPokaimone.size();nbPok++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPokaimone.get(nbPok)))&& p!=this.listPlayers.get(nbPok)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPokaimone.get(nbPok));
+    					Combat c = new Combat(p,this.listPokaimone.get(nbPok));
         				p.setCombat(c);
         				this.listPokaimone.get(nbPok).setCombat(c);
         				p.writeClient("encounter new wild " + 1 );
-        		
+        				this.listCombat.add(c);
         			}
     			}
     		}
@@ -123,20 +133,21 @@ public class Game extends Thread {
     			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
+    					Combat c = new Combat(p,this.listPlayers.get(nbP));
         				p.setCombat(c);
         				this.listPlayers.get(nbP).setCombat(c);
         				p.writeClient("encounter new rival " + 1 );
         				this.listPlayers.get(nbP).writeClient("encounter new rival " + 1 );
+        				this.listCombat.add(c);
         			}
     			}
     			for(int nbPok=0;nbPok<this.listPokaimone.size();nbPok++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPokaimone.get(nbPok)))&& p!=this.listPlayers.get(nbPok)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPokaimone.get(nbPok));
+    					Combat c = new Combat(p,this.listPokaimone.get(nbPok));
         				p.setCombat(c);
         				this.listPokaimone.get(nbPok).setCombat(c);
         				p.writeClient("encounter new wild " + 1 );
-        		
+        				this.listCombat.add(c);
         			}
     			}
     		}
@@ -148,19 +159,21 @@ public class Game extends Thread {
     			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
+    					Combat c = new Combat(p,this.listPlayers.get(nbP));
         				p.setCombat(c);
         				this.listPlayers.get(nbP).setCombat(c);
         				p.writeClient("encounter new rival " + 1 );
         				this.listPlayers.get(nbP).writeClient("encounter new rival " + 1 );
+        				this.listCombat.add(c);
         			}
     			}
     			for(int nbPok=0;nbPok<this.listPokaimone.size();nbPok++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPokaimone.get(nbPok)))&& p!=this.listPlayers.get(nbPok)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPokaimone.get(nbPok));
+    					Combat c = new Combat(p,this.listPokaimone.get(nbPok));
         				p.setCombat(c);
         				this.listPokaimone.get(nbPok).setCombat(c);
         				p.writeClient("encounter new wild " + 1 );
+        				this.listCombat.add(c);
         		
         			}
     			}
@@ -173,20 +186,21 @@ public class Game extends Thread {
     			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
+        				Combat c = new Combat(p,this.listPlayers.get(nbP));
         				p.setCombat(c);
         				this.listPlayers.get(nbP).setCombat(c);
         				p.writeClient("encounter new rival " + 1 );
         				this.listPlayers.get(nbP).writeClient("encounter new rival " + 1 );
+        				this.listCombat.add(c);
         			}
     			}
     			for(int nbPok=0;nbPok<this.listPokaimone.size();nbPok++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPokaimone.get(nbPok)))&& p!=this.listPlayers.get(nbPok)) {
-        				Combat c = new Combat(p.getPokPrinc(),this.listPokaimone.get(nbPok));
+        				Combat c = new Combat(p,this.listPokaimone.get(nbPok));
         				p.setCombat(c);
         				this.listPokaimone.get(nbPok).setCombat(c);
         				p.writeClient("encounter new wild " + 1 );
-        		
+        				this.listCombat.add(c);
         			}
     			}
     		}

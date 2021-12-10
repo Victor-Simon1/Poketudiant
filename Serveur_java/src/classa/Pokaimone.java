@@ -22,7 +22,7 @@ public class Pokaimone {
 	protected int timer;
 	private int x;
 	private int y;
-	private Pokaimone[] pok;
+
 	public Pokaimone(String pName,Type pType,boolean pIsCatchable,String pEvolution
 			,int pAttaque,int pDefense, int pPvMax) {
 		
@@ -42,7 +42,8 @@ public class Pokaimone {
 		this.lvl = 1;
 		this.xp = 0;
 		this.xpMax = setXPMax();
-		this.pok = new Pokaimone[2];
+	
+		
 
 	}
 	
@@ -82,13 +83,7 @@ public class Pokaimone {
 		return combat;
 	}
 
-	public Pokaimone[] getPok() {
-		return pok;
-	}
 
-	public void setPok(Pokaimone[] pok) {
-		this.pok = pok;
-	}
 
 	private int applyCoeff(int stats){
 		return (int)(0.9 + Math.random() *(1.1 -0.9)) * stats;
@@ -102,14 +97,15 @@ public class Pokaimone {
 		return collide;
 	}
 	private void capturePokaimone(Pokaimone p) {
-		if(this.type == Type.TEACHER) {
+		if(this.team.ajoutInTeam(p));
+		/*if(this.type == Type.TEACHER) {
 			if(this.team.pok1 == null) {
 				this.team.pok1 = p;
 			}
 			else if(this.team.pok2 == null) {
 				this.team.pok1 = p;
 			}
-		}
+		}*/
 	}
 	private void chooseattack1() {
 		int random = 0;
