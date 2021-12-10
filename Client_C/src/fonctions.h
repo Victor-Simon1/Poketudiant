@@ -10,6 +10,7 @@ int eventClavier();
 int update();
 int draw();
 
+char** split(char* chaine,const char* delim,int vide);
 
 
 #endif

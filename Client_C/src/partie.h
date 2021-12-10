@@ -4,7 +4,7 @@
 
 typedef struct _partie{
     char nom[30];
-    int **map;
+    char map[150][150];
     int nbJoueur;
     int maxJoueur;
     int nbLigne;
@@ -17,16 +17,16 @@ typedef struct _partie{
 
 
 int nbPartie;
-
+Parties maPartie;
 
 SDL_Texture *textPartie; // texture pour le titre du menu
 
 // =========== fonctions ===========
 
 
-void refreshGame();
-void newPartie(char text[50]);
-void joinPartie(char text[50]);
+int refreshGame();
+int newPartie(char text[50]);
+int joinPartie(char text[50]);
 
 
 Parties createPartie(char name[50]);

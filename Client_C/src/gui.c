@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include <SDL_mixer.h>
+//#include <SDL_mixer.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -140,7 +140,7 @@ Buttons creerBouton(char *p_img, char *p_imgSurvol, char *p_imgPressed, int p_x,
     mon_bouton->imgSurvol = LoadTexture2(game.ecran.renderer, p_imgSurvol); // image lors du survol
     mon_bouton->imgPressed = LoadTexture2(game.ecran.renderer, p_imgPressed);// image lors du click
 
-    mon_bouton->hover = Mix_LoadWAV("src/son/button.ogg");
+    //mon_bouton->hover = Mix_LoadWAV("src/son/button.ogg");
 
     return mon_bouton;
 }
@@ -174,7 +174,7 @@ Buttons supprimButton(Buttons *liste, Buttons mon_bouton){ // supprime et libere
 void freeButton(Buttons my_button){ // libere un bouton
     my_button->suiv = NULL;
     my_button->prec = NULL;
-    Mix_FreeChunk(my_button->hover);
+    //_FreeChunk(my_button->hover);
     SDL_DestroyTexture(my_button->img);
     SDL_DestroyTexture(my_button->imgSurvol);
     SDL_DestroyTexture(my_button->imgPressed);
@@ -268,7 +268,7 @@ int updateGui(){// met à jour tous les groupes actif
                     if(event.type == SDL_MOUSEBUTTONDOWN && tempButton->oldPressed == false && tempButton->isPressed == false){
                         tempButton->isPressed = true;
                         tempButton->fct(tempButton->para);
-                        Mix_PlayChannel(4,tempButton->hover,0);
+                        //Mix_PlayChannel(4,tempButton->hover,0);
                     }
 
                 }

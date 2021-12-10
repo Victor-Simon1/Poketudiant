@@ -9,81 +9,112 @@
 #include "client.h"
 
 
-void refreshGame(){
+int refreshGame(){
 
-    int nbGame = 0, i=0, cpt = 0;
-    char subtext[500];
-    char *sep = "\n", *p;
+    int nbGame = 0, i=0, cpt = 0, cpt2 = 0;;
+    char subtext[500], subtext2[500];
+    char *sep = "\n", *p, *pReceive;
     ssize_t n = 0;
 
     // detruit la liste de texte
     listeTexte = destroyTextes(listeTexte);
+    destroyParties(listeServeur->listePartie);
 
     // demande la liste des games
     strcpy(clientTCP->buffer_send, "require game list\n");
+    clientTCP->buffer_send[18] = '\0';
     clientTCP->client_send(clientTCP, clientTCP->buffer_send);
     printf("========== send : %s\n", clientTCP->buffer_send);
 
-    // recois le nb de games
+    // recoit le nb de games
     n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE);
     clientTCP->buffer_recv[n]='\0';
     printf("========== receive : %s\n", clientTCP->buffer_recv);
 
-    if(strncmp(clientTCP->buffer_recv,"number of games",15) == 0){
+    p = strtok(clientTCP->buffer_recv, sep);
+
+    if(strncmp(p,"number of games",15) == 0){
         strncpy(subtext,&(clientTCP->buffer_recv[16]),1);
         nbGame = atoi(subtext);
         printf("il y a %d game(s)", nbGame);
     }
-
-    // liste des games
-    if(nbGame > 0){
+    
+    p = strtok(clientTCP->buffer_recv, sep);
+    if(!p){ // si plusieur msg
         n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE);
         clientTCP->buffer_recv[n]='\0';
         printf("========== receive : %s\n", clientTCP->buffer_recv);
         p = strtok(clientTCP->buffer_recv, sep);
+    }
+    
+    // liste des games
+    if(nbGame > 0){
         for(i = 0; i<nbGame; i++){
             cpt = 0;
             while(p[cpt] != ' ' ){
                 cpt++;
             }
             strncpy(subtext,&p[0],cpt);
-            printf("il y a %d joueurs ", atoi(subtext));
-            strncpy(subtext,&p[cpt+1], (sizeof(p)/sizeof(char))-cpt-1);
-            //("nb %d", sizeof(p)/sizeof(char));
-            printf("dans la partie %s\nici", subtext);
-            printf("for");
-            if(i < nbGame-1){
-                printf("ici");
-                p = strtok(NULL, sep);
+            printf("il y a %d joueurs \n", atoi(subtext));
+
+            cpt++;
+            cpt2 = 0;
+            while(p[cpt] != ' ' && p[cpt] != '\n'){
+                subtext2[cpt2] = p[cpt];
+                cpt++;
+                cpt2++;
             }
-            // ajout au serveur !!!!!!!!!!!!!!!!!!!!!!!!
-            listeTexte = ajouterTeteTexte(listeTexte, createTexte(clientTCP->buffer_recv, 50, 200));
+            subtext2[cpt2] = '\0';
+            printf("dans la partie %s\nici", subtext2);
+  
+            listeServeur->listePartie = ajouterTetePartie(listeServeur->listePartie, createPartie(subtext2)); // ajoute la partie au serveur
+            listeTexte = ajouterTeteTexte(listeTexte, createTexte(clientTCP->buffer_recv, 50, 200)); // ajoute le texte affiché a l'ecran
+            p = strtok(NULL, sep);
         }
     }
     
     nbPartie = nbGame;
-    
+    return 1;
 }
 
 // crée une nouvelle partie et informe le serveur
-void newPartie(char text[50]){
+int newPartie(char text[50]){
     char nom[50];
 
     printf("donnez un nom de partie :\n");
     scanf("%s", nom);
-
+    printf("Name : %s\n",nom);
+    
     //envoie au serveur 
     strcpy(clientTCP->buffer_send, "create game ");
     strcat(clientTCP->buffer_send, nom);
-    clientTCP->client_send(clt, clientTCP->buffer_send);
+    strcat(clientTCP->buffer_send, "\n");
+    clientTCP->client_send(clientTCP, clientTCP->buffer_send);
+    printf("=========== send : %s\n",clientTCP->buffer_send);
 
+    // recoit la confirmation
+    ssize_t n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE);
+    clientTCP->buffer_recv[n]='\0';
+    printf("========== receive : %s\n", clientTCP->buffer_recv);
+    if(strncmp(clientTCP->buffer_recv,"game created",12) == 0){
+        printf("game crée\n");
+        changeAffichage("GAME");
+    }
+    else{
+        printf("game non crée\n");
+    }
+    destroyParties(listeServeur->listePartie);
+    listeServeur->listePartie = ajouterTetePartie(listeServeur->listePartie, createPartie(nom)); // ajoute la partie au serveur
+    //maPartie = createPartie(nom);
+    listeTexte = ajouterTeteTexte(listeTexte, createTexte(clientTCP->buffer_recv, 50, 200)); // ajoute le texte affiché a l'ecran
+    return 1;
 }
 
 // rejoins une partie et informe le serveur
-void joinPartie(char text[50]){
+int joinPartie(char text[50]){
     Parties temp = listeServeur->listePartie;
     int cpt = 0;
-    char pnom;
+    char *pnom;
 
     while(temp){
         if(cpt == choix){
@@ -100,12 +131,15 @@ void joinPartie(char text[50]){
     //envoie au serveur 
     strcpy(clientTCP->buffer_send, "join game ");
     strcat(clientTCP->buffer_send, pnom);
-    clientTCP->client_send(clt, clientTCP->buffer_send);
+    strcat(clientTCP->buffer_send, "\n");
+    clientTCP->client_send(clientTCP, clientTCP->buffer_send);
+    printf("=========== send : %s\n",clientTCP->buffer_send);
 
+    return 1;
 }
 
 Parties createPartie(char name[50]){
-
+    int i=0, j=0;
     Parties game = (Partie*)malloc(sizeof(Partie));
 
     strcpy(game->nom, name);
@@ -115,6 +149,11 @@ Parties createPartie(char name[50]){
     game->nbColonne = 0;
     game->suiv = NULL;
 
+    for(i=0; i<150; i++){
+        for(j=0; j<150; j++){
+            game->map[i][j] = ' ';
+        }
+    }
     return game;
 }
 
@@ -151,8 +190,8 @@ int loadPartie(){
     
     // bouton refresh
     Buttons ButtonRefresh = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
-                                                                                                game.ecran.camera.w/2 , 
-                                                                                                game.ecran.camera.h/2 , 
+                                                                                                game.ecran.camera.w/2 +100, 
+                                                                                                game.ecran.camera.h/2 +100, 
                                                                                                 150, 50, 
                                                                                                 &refreshGame,
                                                                                                 "");
@@ -164,8 +203,8 @@ int loadPartie(){
     
     // bouton menu
     Buttons ButtonCreate = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
-                                                                                                game.ecran.camera.w/2 , 
-                                                                                                game.ecran.camera.h/2 +100, 
+                                                                                                game.ecran.camera.w/2 +100, 
+                                                                                                game.ecran.camera.h/2 +150, 
                                                                                                 150, 50, 
                                                                                                 &newPartie,
                                                                                                 "");
@@ -177,9 +216,9 @@ int loadPartie(){
 
     // bouton join
     Buttons ButtonJoin = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
-                                                                                                game.ecran.camera.w/2 , 
-                                                                                                game.ecran.camera.h/2 , 
-                                                                                                350, 50, 
+                                                                                                game.ecran.camera.w/2 +100, 
+                                                                                                game.ecran.camera.h/2 +200, 
+                                                                                                150, 50, 
                                                                                                 &joinPartie,
                                                                                                 "");
     
@@ -251,6 +290,9 @@ int drawPartie(){
 }
 
 void liberePartie(){
-    destroyTextes(textPartie);
+    SDL_DestroyTexture(textPartie);
     textPartie = NULL;
+
+    //destroyParties(maPartie);
+    
 }

@@ -26,13 +26,14 @@ Textes listeTexte; // liste des serveurs disponible
 
 int nbServeur;
 
+
 // =========== fonctions ===========
 
 int refresh(char texte[20]);
-
+int joinServeur();
 
 Serveurs createServeur(char _ip[20]);
-Serveurs ajouterTeteTexte(Serveurs liste, Serveurs s);
+Serveurs ajouterTeteServeur(Serveurs liste, Serveurs s);
 void destroyServeurs(Serveurs s);
 
 Textes createTexte(char text[50], int p_x, int p_y);

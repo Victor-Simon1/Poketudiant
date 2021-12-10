@@ -14,6 +14,7 @@
 #include "menu.h"
 #include "serveur.h"
 #include "client.h"
+#include "player.h"
 
 
 
@@ -44,9 +45,9 @@ int main(int argc, char **argv){
         printf("SDL_ttf could not initialize! SDL_ttf Error:%s\n",TTF_GetError());
         return -1;
     }
-    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){ //Initialisation de l'API Mixer pour les sons
+    /*if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){ //Initialisation de l'API Mixer pour les sons
         printf("%s", Mix_GetError());
-    }
+    }*/
 
     // création de la fenetre
     game.ecran.windows = SDL_CreateWindow("Poketudiant Online",      // nom de la fenètre
@@ -142,10 +143,12 @@ int main(int argc, char **argv){
     IMG_Quit();
     SDL_Quit();
     TTF_Quit();
-    Mix_CloseAudio();
+    //Mix_CloseAudio();
 
     // ============= client =============
     client_close_and_free(clientTCP);
+
+    player = destroyPoketudiant(player);
 
     // ============= font ==============
     TTF_CloseFont(police);
@@ -158,6 +161,22 @@ int main(int argc, char **argv){
     listeGroupes = NULL;
 
     SDL_DestroyTexture(imgFleche);  
+    imgFleche = NULL;
+
+    SDL_DestroyTexture(herbeImg);  
+    imgFleche = NULL;
+    SDL_DestroyTexture(soinImg);  
+    imgFleche = NULL;
+    SDL_DestroyTexture(buissonImg);  
+    imgFleche = NULL;
+
+    SDL_DestroyTexture(player1Img);  
+    imgFleche = NULL;
+    SDL_DestroyTexture(player2Img);  
+    imgFleche = NULL;
+    SDL_DestroyTexture(player3Img);  
+    imgFleche = NULL;
+    SDL_DestroyTexture(player4Img);  
     imgFleche = NULL;
 
     libereMenu();

@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include "SDL_ttf.h"
 
+#define SIZE_TILE 32
+
 typedef struct{
     SDL_Color noire;
     SDL_Color rouge;
@@ -52,8 +54,18 @@ bool running;
 Game game;
 
 int choix;
+bool choose;
 
 SDL_Texture *imgFleche;// img fleche de selection
+
+SDL_Texture *herbeImg; // img herbe map
+SDL_Texture *soinImg; // img soin map
+SDL_Texture *buissonImg; // img buisson map
+
+SDL_Texture *player1Img; // img player 1
+SDL_Texture *player2Img; // img player 2
+SDL_Texture *player3Img; // img player 3
+SDL_Texture *player4Img; // img player 4
 
 TTF_Font *police;
 TTF_Font *policeTitre;

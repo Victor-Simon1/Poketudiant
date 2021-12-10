@@ -35,7 +35,21 @@ int load(){
    
    // ==================================== INITIALISATION VARIABLES ====================================
 
+    herbeImg = LoadTexture2(game.ecran.renderer,"src/gfx/herbe.png");
+    soinImg = LoadTexture2(game.ecran.renderer,"src/gfx/soin.png");
+    buissonImg = LoadTexture2(game.ecran.renderer,"src/gfx/buisson.png");
+
+    player1Img = LoadTexture2(game.ecran.renderer,"src/gfx/player1.png");
+    player2Img = LoadTexture2(game.ecran.renderer,"src/gfx/player2.png");
+    player3Img = LoadTexture2(game.ecran.renderer,"src/gfx/player3.png");
+    player4Img = LoadTexture2(game.ecran.renderer,"src/gfx/player4.png");
+
     running = true;
+    choose = true;
+    player = createPoketudiant();
+
+    game.ecran.camera.x = 0;
+    game.ecran.camera.y = 0;
 
     // Couleur de la police
     game.couleur.noir.r = 0;

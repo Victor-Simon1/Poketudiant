@@ -8,9 +8,9 @@
     =======================   UDP   ================================
 */
 
-ssize_t client_receive_udp(struct client *this,char* buf, size_t size){
+ssize_t client_receive_udp(struct client *this,char* buf, size_t size, struct sockaddr_in *saddr){
     if(!buf) return 0;
-    return recvfrom(this->socket, buf, size, 0, NULL, NULL);
+    return recvfrom(this->socket, buf, size, 0, (struct sockaddr*)saddr, sizeof(struct sockaddr_in));
 }
 void client_send_udp(struct client* this,char*msg){
     if(sendto(this->socket,msg,strlen(msg),0,(struct sockaddr*)&this->clientAddr,sizeof(struct sockaddr_in))==ERR)
@@ -25,8 +25,8 @@ Client client_create_udp(char* addr,int port){
        // neterr_client(clt,SOCKET_ERR);
     }
 
-	int optval=1; /*Prepare the options of the socket for Broadcast */
- 	int optlen=sizeof(int); 
+	int optval = 1; /*Prepare the options of the socket for Broadcast */
+ 	int optlen = sizeof(int); 
 
 	if(setsockopt(sfd,SOL_SOCKET,SO_BROADCAST,(char *) &optval,optlen)){ 
 	    perror("Error setting socket to BROADCAST mode"); 
@@ -37,16 +37,16 @@ Client client_create_udp(char* addr,int port){
 
     memset(&clt->clientAddr,0,sizeof(struct sockaddr_in));
 
-    clt->socket=sfd;
-    clt->clientAddr.sin_family=AF_INET;
-    clt->clientAddr.sin_port=htons((uint16_t) port);
+    clt->socket = sfd;
+    clt->clientAddr.sin_family = AF_INET;
+    clt->clientAddr.sin_port = htons((uint16_t) port);
     clt->clientAddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
 
-    clt->client_receive=&client_receive_udp;
-    clt->client_send=&client_send_udp;
+    clt->client_receiveUDP = &client_receive_udp;
+    clt->client_send = &client_send_udp;
 
-    //if(!inet_aton(addr,&clt->clientAddr.sin_addr)){ //neterr_client(clt,SOCKET_ERR);
-   // }
+   // if(!inet_aton(addr,&clt->clientAddr.sin_addr)){ //neterr_client(clt,SOCKET_ERR);
+   //}
 
     return clt;
 }

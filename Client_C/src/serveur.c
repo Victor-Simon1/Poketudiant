@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/select.h>
+#include <errno.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 #include "gui.h"
 #include "game.h"
 #include "menu.h"
@@ -17,27 +26,90 @@
 
 */
 
+/*
+int refresh(char texte[50]){
+
+    SDL_Log("refresh ...");
+    
+    // reset
+    nbServeur = 0;
+    destroyServeurs(listeServeur);
+    listeTexte = destroyTextes(listeTexte);
+
+    struct timeval time;
+    time.tv_sec = 5;
+    time.tv_usec = 0;
+    ssize_t n = 0;
+    int ret;
+
+    // envoie
+    Client clt = client_create_udp("", 9000); 
+    strcpy(clt->buffer_send, "looking for poketudiant servers");
+    clt->client_send(clt, clt->buffer_send);
+    SDL_Log("=========== send : %s \n", clt->buffer_send);
+
+    fd_set rdfs;
+    FD_ZERO(&rdfs);
+    FD_SET(clt->socket, &rdfs);
+    
+    // reception
+    if((ret = select(clt->socket + 1, &rdfs, NULL, NULL, &time)) < 0){ // attente de réponse des serveurs
+        perror("select()");
+        exit(errno);
+    }
+    
+    if(ret == 0){// temps écoulé
+        SDL_Log("temps écoulé");
+    }    
+    bool stop = false;
+    //if(!stop){
+        if(FD_ISSET(clt->socket, &rdfs)){// données recu
+            SDL_Log("while");
+            struct sockaddr_in *saddr;
+            n = clt->client_receiveUDP(clt, clt->buffer_recv, SIZE-1, &saddr);
+            clt->buffer_recv[n] = '\0';
+            printf("-----------receive : %s\n", clt->buffer_recv);
+            
+            printf("ip : %s\n", inet_ntoa(saddr->sin_addr));
+        
+        }
+        else{
+           // stop = true;
+        }
+
+    
+
+
+}
+*/
+
 
 // fait un appel broadcast pour rafraichir la liste des serveurs disponible
 int refresh(char texte[20]){
-
+   
     SDL_Log("refresh");
     nbServeur = 0;
-
+    /*
     Client clt = client_create_udp("", 9000); 
     strcpy(clt->buffer_send, "looking for poketudiant servers");
-
+    clt->client_send(clt, clt->buffer_send);
+    //printf("client %s \n", clt->buffer_send);
     ssize_t n = 0;
     int ret;
-    char hostbuffer[SIZE];
+
+    char hostbuffer[SIZE], **adresse;
     memset(hostbuffer, 0, sizeof(char) * SIZE);
     struct hostent *host;
     struct in_addr **adr;
+    struct timeval time;
+    time.tv_sec = 5;
+    time.tv_usec = 0;
     fd_set rdfs;
     FD_ZERO(&rdfs);
     FD_SET(clt->socket, &rdfs);
 
-    if((ret = select((clt->socket + 1, &readfs, NULL, NULL, NULL)) < 0){ // attente de réponse des serveurs
+
+    if((ret = select(clt->socket + 1, &rdfs, NULL, NULL, &time)) < 0){ // attente de réponse des serveurs
         perror("select()");
         exit(errno);
     }
@@ -46,10 +118,25 @@ int refresh(char texte[20]){
         SDL_Log("temps écoulé");
     }    
    
-   if(FD_ISSET((clt->socket, readfs)){// données recu
+    if(FD_ISSET(clt->socket, &rdfs)){// données recu
+        /*char *buf;
+        size_t bufSize = 500;
+        struct sockaddr *addr = clt->clientAddr;
+        socklen_t *sock = clt->len;
+
+        ssize_t result = recvfrom(clt->socket, buf, bufSize, 0,  &addr, &sock);
+        printf("msg : %s\n", buf);
+        printf("ip : %s\n", addr->sin_addr);
+       
+       
         n = clt->client_receive(clt, clt->buffer_recv, SIZE-1);
+        printf("ip : %s\n", inet_ntoa( (clt->clientAddr.sin_addr)));
+       */
+       
+       /*
+        
         clt->buffer_recv[n] = '\0';
-        printf("-----------receive : %s\n", buffer_recv);
+        printf("-----------receive : %s\n", clt->buffer_recv);
         if(n == 0)
             SDL_Log("serveur down");
         else{
@@ -58,13 +145,43 @@ int refresh(char texte[20]){
                     perror("gethostname");
                     exit(EXIT_FAILURE);
                 }
+                else{
+                    printf("Result for Host %s \n",hostbuffer); 
+                }
             }
             if ((host = gethostbyname(hostbuffer)) != NULL){
-                for (adr = (struct in_addr **)host->h_addr_list; *adr; adr++)
+                if (host == NULL) {
+                    printf("gethostbyname() failed\n");
+                } 
+                else {
+                    printf("%s = ", host->h_name);
+                    unsigned int i=0;
+                    while ( host->h_addr_list[i] != NULL) {
+                        printf( "%s ", inet_ntoa( *( struct in_addr*)( host->h_addr_list[i])));
+                        i++;
+                    }
+                    printf("\n");
+                }
+            
+        
+
+
+                /*
+                address = host->h_addr_list;
+                while(*(address)) {
+                    printf("IP : %s ",inet_ntoa(*(struct in_addr *)*address));
+                        address++;
+                }      
+
+
+
+                /*
+                for (adr = (struct in_addr **)(host->h_addr_list); *adr; adr++)
                     SDL_Log("IP : %s", inet_ntoa(**adr)); 
                     nbServeur++;   
                     listeServeur = createServeur(inet_ntoa(**adr));   
                     listeTexte = ajouterTeteTexte(listeTexte, createTexte(inet_ntoa(**adr), 50, 250));         
+            
             }
 
         }
@@ -73,22 +190,22 @@ int refresh(char texte[20]){
    }
 
    client_close_and_free(clt);
-/*
+  
+*/
     
     // reset la liste des serveurs
     destroyServeurs(listeServeur);
-    listeServeur = createServeur("172.31.129.186");
     listeServeur = createServeur("172.31.129.187");
+    //listeServeur = createServeur("172.31.129.188");
 
     listeTexte = destroyTextes(listeTexte);
-    listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.186", 50, 200));
-    listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.187", 50, 250));
+    listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.187", 150, 200));
+    //listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.188", 150, 250));
     nbServeur = 2;
-*/
+
 
     return 1;
 }
-
 
 
 // ============================================= TEXTE =============================================
@@ -127,12 +244,13 @@ Textes destroyTextes(Textes t){
 // ============================================= SERVEUR =============================================
 
 // rejoin un serveur
-void joinServeur(){  
+int joinServeur(char text[50]){  
     Serveurs temp = listeServeur;
     int cpt = 0;
     char ipTemp[30];
 
     while(temp){
+        //SDL_Log("connecté à : %s", temp->ip);
         if(cpt == choix){
             strcpy(ipTemp, temp->ip);  
             break;          
@@ -146,17 +264,18 @@ void joinServeur(){
     // création du client TCP
     clientTCP = client_create_tcp(ipTemp, 9001);
     // connexion
-    if(connect(player->socket,&player->clientAddr,player->len)==-1){
+    if(connect(clientTCP->socket,&clientTCP->clientAddr,clientTCP->len)==-1){
         printf("pas connecté\n");
-        exit(1);
+        //exit(1);
     }
     SDL_Log("connecté à : %s", ipTemp);
     
-    // passe a l'ecran des parties
+    // passe à l'ecran des parties
     choix = 0;
     changeAffichage("PARTIE");
     refreshGame();
 
+    return 1;
 }
 
 Serveurs createServeur(char _ip[20]){
@@ -172,7 +291,7 @@ Serveurs createServeur(char _ip[20]){
     return serv;
 }
 
-Serveurs ajouterTeteTexte(Serveurs liste, Serveurs s){  // ajoute un serveur à une liste de serveur
+Serveurs ajouterTeteServeur(Serveurs liste, Serveurs s){  // ajoute un serveur à une liste de serveur
 
     s->suiv = liste;
     liste = s;
@@ -197,6 +316,7 @@ int loadServeur(){
 
     listeServeur = NULL;
     choix = 0;
+   
 
 
     // ============================== GUI ==============================
@@ -211,15 +331,15 @@ int loadServeur(){
                                                                                                 &refresh,
                                                                                                 "");
     
-   ButtonRefresh->box.x -= ButtonRefresh->box.w/2;
-   ButtonRefresh->box.y -= ButtonRefresh->box.h/2;
+    ButtonRefresh->box.x -= ButtonRefresh->box.w/2;
+    ButtonRefresh->box.y -= ButtonRefresh->box.h/2;
     
     groupeServeur->listeButtons = ajouter_teteButton(groupeServeur->listeButtons , ButtonRefresh);// ajoute le bouton refresh au groupe
     
     // bouton menu
     Buttons ButtonMenu = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
                                                                                                 game.ecran.camera.w/2 , 
-                                                                                                game.ecran.camera.h/2 +100, 
+                                                                                                game.ecran.camera.h/2 + 200, 
                                                                                                 150, 50, 
                                                                                                 &changeAffichage,
                                                                                                 "MENU");
@@ -231,9 +351,9 @@ int loadServeur(){
 
     // bouton join
     Buttons ButtonJoin = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
-                                                                                                game.ecran.camera.w/2 , 
-                                                                                                game.ecran.camera.h/2 , 
-                                                                                                350, 50, 
+                                                                                                game.ecran.camera.w/2, 
+                                                                                                game.ecran.camera.h/2 +100, 
+                                                                                                150, 50, 
                                                                                                 &joinServeur,
                                                                                                 "");
     
@@ -252,25 +372,35 @@ int loadServeur(){
 int updateServeur(){
 
     // =========================== Gestion des events (clavier) ===============================
-
+/*
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (state[SDL_SCANCODE_UP]){ // HAUT
-       if(choix > 0){
-           choix--;
-       }
-       else{
-           choix = nbServeur;
-       }
+    if(choose == true){
+        SDL_Log("true");
+        if (state[SDL_SCANCODE_UP]){ // HAUT
+            SDL_Log("haut");
+            if(choix > 0){
+                SDL_Log("moins");
+                choix--;
+            }
+            else{
+                choix = nbServeur;
+            }   
+        }
+        if (state[SDL_SCANCODE_DOWN]){ // BAS
+        SDL_Log("bas");
+            if(choix < nbServeur-1){
+                choix++;
+            }
+            else{
+                choix = 0;
+            }
+        }        
     }
-    if (state[SDL_SCANCODE_DOWN]){ // BAS
-        if(choix < nbServeur-1){
-            choix++;
-        }
-        else{
-            choix = 0;
-        }
+    else{
+        SDL_Log("false");
     }
 
+*/
     updateGui();
 
     return 1;   
@@ -288,7 +418,7 @@ int drawServeur(){
     int cpt = 0;
     while(temp){
         if(cpt == choix){
-            SDL_Rect Rect = {temp->x-50, temp->y-10, 94, 171}; // fleche
+            SDL_Rect Rect = {temp->x-50, temp->y-10, 50, 50}; // fleche
             SDL_RenderCopy(game.ecran.renderer, imgFleche, NULL, &Rect);
         }
                 

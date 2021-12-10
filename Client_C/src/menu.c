@@ -35,7 +35,7 @@ int loadMenu(){ // charge le menu
     groupeMenu->actif = true;
 
     Buttons ButtonServeur = creerBouton("src/gfx/boutonServeurs.png", "src/gfx/boutonServeurHover.png", "src/gfx/boutonServeurHover.png", 
-                                                                                                game.ecran.camera.w/2 , 
+                                                                                                game.ecran.camera.w/2 -200, 
                                                                                                 game.ecran.camera.h/2 , 
                                                                                                 150, 50, 
                                                                                                 &changeAffichage,

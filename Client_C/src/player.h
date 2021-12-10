@@ -22,9 +22,13 @@ typedef enum _Type{
 typedef struct _poke{
     double vie;
     int maxVie;
+    int x;
+    int y;
     double xp;
     int lvl;
+    double timer;
     struct _poke *team[MAX_TEAM];
+    struct _poke *suiv;
     int nbPoke;
     Variete variete;
     Attaque listAtk[5];
@@ -34,6 +38,8 @@ typedef struct _poke{
 
 
 Poketudiants player;
+Poketudiants listeRival;
+
 
 int tabAtk[NB_VARIETE];
 int tabDef[NB_VARIETE];
@@ -42,5 +48,12 @@ int tabPvMax[NB_VARIETE];
 int tabPuissance[NB_ATTAQUE];
 
 Type tabEfficace[NB_TYPE];
+
+
+
+Poketudiants createPoketudiant();
+Poketudiants ajouterTetePoketudiant(Poketudiants liste, Poketudiants t);
+Poketudiants destroyPoketudiant(Poketudiants t);
+
 
 #endif
