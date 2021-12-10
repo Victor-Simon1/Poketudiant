@@ -20,7 +20,7 @@ public class Map {
 		this.nbHighGrass = 0;
 		this.nbHeal = 0;
 		//this.fileMap = new File("file/map"+Function.myRandom(1,4)+".txt");
-		this.fileMap = new File("file/map4.txt");
+		this.fileMap = new File("Serveur_java/file/map4.txt");
 		try {
 			this.readMap(fileMap);
 		} catch (IOException e) {
@@ -31,6 +31,13 @@ public class Map {
 		//this.nb_lignes = Function.myRandom(10, 50);PAS RANDOM MAIS FICHIER
 		//this.nb_colonnes = Function.myRandom(10, 50);
 		//this.Map = new int[]
+	}
+	public Map(Map map) {
+		this.Map = map.Map;
+		this.nb_colonnes =map.nb_colonnes;
+		this.nb_lignes = map.nb_lignes;
+		this.nbHighGrass = map.nbHighGrass;
+		this.nbHeal = map.nbHeal;
 	}
 	public int getLine() {
 		return this.nb_lignes;

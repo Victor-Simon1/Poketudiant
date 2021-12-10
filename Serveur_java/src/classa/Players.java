@@ -107,8 +107,9 @@ public class Players  extends Thread implements Runnable{
                         //System.out.println(g.toString());
                         if(g != null) {
                         	//System.out.println("g");
-                        	g.start();
+                        	
                             this.game = g;
+                            this.game.start();
                             if(g.joinGame(this)) {
                             	
                             	 this.game.setNbPlayer(this.game.getNbPlayer()+1);

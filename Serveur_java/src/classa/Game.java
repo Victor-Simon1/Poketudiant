@@ -21,6 +21,7 @@ public class Game extends Thread {
 	
 	
 	private Map map;
+	private Map mapPlayers;
 	//Constructeur
     public Game(String name){
     	this.max_player = 4;
@@ -30,14 +31,21 @@ public class Game extends Thread {
 		this.isReady = false;
 		this.nb_player = 0;
 		this.map = new Map();
+		this.mapPlayers = new Map(this.map);
 		this.nbMaxPokaimone = (int)(this.map.nbHighGrass /3);
     }
+    
 	public void run() {
-		this.verifyPokaimone();
+		for(;;) {
+			//this.listPlayers.forEach(n -> System.out.println(n.ge));
+			this.verifyPokaimone();
+		}
+		
 	}
  
 
     public void verifyPokaimone() {
+    	String evoName;
     	//verifie si un pokaimone peut disparaite
     	this.listPokaimone.forEach(n -> {
     		if(n.timer>20000) {
@@ -46,8 +54,10 @@ public class Game extends Thread {
     	});
     	if(this.listPokaimone.size() < this.nbMaxPokaimone) {
     		if(Function.myRandom(0, 100)<10) {
-    			Poketudiant rand = Poketudiant.values()[new Random().nextInt(Poketudiant.values().length)];;
-    			this.listPokaimone.add(new Pokaimone(rand.name, rand.type, rand.isCapturable, rand.evolution.name,rand.atk ,rand.def, rand.pv));
+    			Poketudiant rand = Poketudiant.values()[new Random().nextInt(Poketudiant.values().length)];
+    			if(rand.evolution == null)evoName = "NULL";
+    			else evoName = rand.evolution.name;
+    			this.listPokaimone.add(new Pokaimone(rand.name, rand.type, rand.isCapturable, evoName,rand.atk ,rand.def, rand.pv));
     		}
     			
     		
@@ -82,8 +92,10 @@ public class Game extends Thread {
     
     public void movePlayer(Players p,char move) {
     	if(move == 'L') {
-    		if(p.getPokPrinc().getX()-1<map.nb_colonnes ) { 
+    		if(p.getPokPrinc().getX()-1<mapPlayers.nb_colonnes ) { 
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = this.map.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] ;
     			p.getPokPrinc().setX(p.getPokPrinc().getX()-1);
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
         				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
@@ -105,8 +117,10 @@ public class Game extends Thread {
     		}
     	}
     	if(move == 'R') {
-    		if(p.getPokPrinc().getX()+1<map.nb_colonnes ) { 
+    		if(p.getPokPrinc().getX()+1<mapPlayers.nb_colonnes ) { 
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = this.map.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] ;
     			p.getPokPrinc().setX(p.getPokPrinc().getX()+1);
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
         				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
@@ -128,8 +142,10 @@ public class Game extends Thread {
     		}
     	}
     	if(move == 'D') {
-    		if(p.getPokPrinc().getY()+1<map.nb_colonnes ) { 
+    		if(p.getPokPrinc().getY()+1<mapPlayers.nb_colonnes ) { 
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = this.map.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] ;
     			p.getPokPrinc().setY(p.getPokPrinc().getY()+1);
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
         				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
@@ -151,8 +167,10 @@ public class Game extends Thread {
     		}
     	}
     	if(move == 'U') {
-    		if(p.getPokPrinc().getY()-1<map.nb_colonnes ) { 
+    		if(p.getPokPrinc().getY()-1<mapPlayers.nb_colonnes ) { 
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = this.map.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] ;
     			p.getPokPrinc().setY(p.getPokPrinc().getY()-1);
+    			this.mapPlayers.Map[p.getPokPrinc().getY()][p.getPokPrinc().getX()] = '1';
     			for(int nbP = 0;nbP <this.nb_player ;nbP++) {
     				if(p.getPokPrinc().collidePoketudiant((this.listPlayers.get(nbP).getPokPrinc())) && p!=this.listPlayers.get(nbP)) {
         				Combat c = new Combat(p.getPokPrinc(),this.listPlayers.get(nbP).getPokPrinc());
@@ -176,7 +194,7 @@ public class Game extends Thread {
     	
     	this.listPlayers.forEach(n -> {
     		n.writeClient("map "+this.map.nb_lignes + " " + this.map.nb_colonnes + "\n");
-    		n.writeClient(this.map.getTab(n));
+    		n.writeClient(this.mapPlayers.getTab(n));
     	} );
     
     }
