@@ -73,6 +73,17 @@ public class Players  extends Thread implements Runnable{
         System.out.println("Same ? : " + same);
         return same;
     }
+    
+    
+    public void envoieEquipe() {
+    	String team = null;
+    	this.writeClient("team contains " + this.pokPrinc.getPok().length +1 );
+    	team += this.pokPrinc.getName() + this.pokPrinc.getType() + this.pokPrinc.getLvl() + this.pokPrinc.getXp() + this.pokPrinc.getXpMax() + this.pokPrinc.getPv() + this.pokPrinc.getPvMax() + this.pokPrinc.getAttaque() + this.pokPrinc.getDefense() + this.pokPrinc.getAttack1().name()+ this.pokPrinc.getAttack1().name(); 
+    	for(int i = 0;i< this.pokPrinc.getPok().length;i++) {
+    		team += this.pokPrinc.getPok()[i].getName() + this.pokPrinc.getPok()[i].getType() + this.pokPrinc.getPok()[i].getLvl() + this.pokPrinc.getPok()[i].getXp() +this.pokPrinc.getPok()[i].getXpMax() + this.pokPrinc.getPok()[i].getPv() +this.pokPrinc.getPok()[i].getPvMax() + this.pokPrinc.getPok()[i].getAttaque() + this.pokPrinc.getPok()[i].getDefense() +this.pokPrinc.getPok()[i].getAttack1().name()+ this.pokPrinc.getPok()[i].getAttack1().name(); 
+    	}
+    	this.writeClient(team);
+    }
     public void run(){//fonction du thread
         System.out.println("ICI");
         String str = new String();

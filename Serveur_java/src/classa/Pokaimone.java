@@ -46,6 +46,50 @@ public class Pokaimone {
 
 	}
 	
+	public boolean isCatchable() {
+		return isCatchable;
+	}
+
+	public void setCatchable(boolean isCatchable) {
+		this.isCatchable = isCatchable;
+	}
+
+	public String getEvolution() {
+		return evolution;
+	}
+
+	public void setEvolution(String evolution) {
+		this.evolution = evolution;
+	}
+
+	public Attack getAttack1() {
+		return attack1;
+	}
+
+	public void setAttack1(Attack attack1) {
+		this.attack1 = attack1;
+	}
+
+	public Attack getAttack2() {
+		return attack2;
+	}
+
+	public void setAttack2(Attack attack2) {
+		this.attack2 = attack2;
+	}
+
+	public Combat getCombat() {
+		return combat;
+	}
+
+	public Pokaimone[] getPok() {
+		return pok;
+	}
+
+	public void setPok(Pokaimone[] pok) {
+		this.pok = pok;
+	}
+
 	private int applyCoeff(int stats){
 		return (int)(0.9 + Math.random() *(1.1 -0.9)) * stats;
 	}
