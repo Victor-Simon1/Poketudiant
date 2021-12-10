@@ -89,7 +89,7 @@ public class Pokaimone {
 		int random = 0;
 		random = (int) (0 + Math.random() * (attack1.ordinal() -0)) ;
 		
-		if(if(this.type != Type.TEACHER) {
+		if(this.type != Type.TEACHER) {
 			while(this.type == Attack.values()[random].type ) {
 				random = (int) (0 + Math.random() * (attack1.ordinal() -0)) ;
 				//System.out.println("BOUVLE PTN");
@@ -100,7 +100,7 @@ public class Pokaimone {
 	}
 	
 	public int makeDamage(int power,Pokaimone p){
-		return (float)(myRandom(90,101)/100) * this.att / p.getDef() * power;
+		return (int) ((float)(Function.myRandom(90,101)/100) * this.getAttaque() / p.getDefense() * power);
 	}
 	private int make_attack1(Type def) {
 		if(this.attack1.type == Type.NOISY && def == Type.LAZY) {
@@ -148,30 +148,31 @@ public class Pokaimone {
 		}
 	}
 	public void setXp(double Xp){
-		this.Xp = Xp
-		if(this.Xp > this.xpMax){
-			this.Xp = this.Xp - this.xpMax;
+		this.xp = Xp;
+		if(this.xp > this.xpMax){
+			this.xp = this.xp - this.xpMax;
 			this.lvl++;
 		}
 
 	}
 	public double getXp(){
-		return this.Xp;
+		return this.xp;
 	}
 
 	private double setXPMax(){
 		return 500 * ((1+ this.lvl) /2);
 	}
+	
 	public boolean attemptCatch(Pokaimone p){
-		int random = myRandom(0,100);
-		int probaCatch = 2 * Math.max(0.5 -P.getPv()/p.getpvMax(),0);
+		int random = Function.myRandom(0,100);
+		int probaCatch = (int) (2 * Math.max(0.5 - p.getPv()/p.getPvMax(),0));
 
 		return random <probaCatch;
 	}
 	
 	public boolean tentativeFuite(Pokaimone p){
 		boolean fuite = true;
-		int probaFuite = myRandom(0,100);
+		int probaFuite = Function.myRandom(0,100);
 		if(this.lvl< p.getLvl()-3)fuite = false;
 		else if(this.lvl< p.getLvl()-2)if(probaFuite<25)fuite = false;
 		else if(this.lvl< p.getLvl()-2)if(probaFuite<40)fuite = false;
@@ -198,5 +199,77 @@ public class Pokaimone {
 	public void setCombat(Combat c) {
 		// TODO Auto-generated method stub
 		this.combat = c;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	public int getAttaque() {
+		return attaque;
+	}
+
+	public void setAttaque(int attaque) {
+		this.attaque = attaque;
+	}
+
+	public int getDefense() {
+		return defense;
+	}
+
+	public void setDefense(int defense) {
+		this.defense = defense;
+	}
+
+	public int getPvMax() {
+		return pvMax;
+	}
+
+	public void setPvMax(int pvMax) {
+		this.pvMax = pvMax;
+	}
+
+	public int getPv() {
+		return pv;
+	}
+
+	public void setPv(int pv) {
+		this.pv = pv;
+	}
+
+	public double getXpMax() {
+		return xpMax;
+	}
+
+	public void setXpMax(double xpMax) {
+		this.xpMax = xpMax;
+	}
+
+	public int getLvl() {
+		return lvl;
+	}
+
+	public void setLvl(int lvl) {
+		this.lvl = lvl;
+	}
+
+	public int getTimer() {
+		return timer;
+	}
+
+	public void setTimer(int timer) {
+		this.timer = timer;
 	}
 }
