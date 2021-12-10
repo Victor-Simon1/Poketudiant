@@ -8,6 +8,7 @@
 #include "fonctions.h"
 #include "serveur.h"
 #include "player.h"
+#include "partie.h"
 
 /*
   _        ___       _      ____  

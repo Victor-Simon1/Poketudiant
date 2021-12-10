@@ -15,7 +15,7 @@
 #include "serveur.h"
 #include "client.h"
 #include "player.h"
-
+#include "partie.h"
 
 
 /*

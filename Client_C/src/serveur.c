@@ -18,7 +18,7 @@
 #include "fonctions.h"
 #include "serveur.h"
 #include "client.h"
-
+#include "partie.h"
 
 /*
 

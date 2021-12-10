@@ -1,5 +1,5 @@
 poketudiant : player.o load.o main.o fonctions.o gui.o menu.o serveur.o
-	gcc -o ./bin/poketudiant player.o load.o main.o fonctions.o gui.o menu.o serveur.o -lmingw32 -Llib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+	gcc -o ./bin/poketudiant player.o load.o main.o fonctions.o gui.o menu.o serveur.o -L/usr/lib/x86_64-linux-gnu -lm -Llib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 
 main.o : src/main.c
 	gcc src/main.c -c -Iinclude  -o main.o
