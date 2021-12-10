@@ -146,7 +146,7 @@ public class Pokaimone {
 	public int makeDamage(int power,Pokaimone p){
 		return (int) ((float)(Function.myRandom(90,101)/100) * this.getAttaque() / p.getDefense() * power);
 	}
-	private int make_attack1(Type def) {
+	public int make_attack1(Type def) {
 		if(this.attack1.type == Type.NOISY && def == Type.LAZY) {
 			return this.attack1.power *2;
 		}
@@ -164,7 +164,7 @@ public class Pokaimone {
 		return this.attack1.power;
 	}
 	
-	private int make_attack2(Type def) {
+	public int make_attack2(Type def) {
 		if(this.attack1.type == Type.NOISY && def == Type.LAZY) {
 			return this.attack1.power *2;
 		}

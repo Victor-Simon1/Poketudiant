@@ -134,6 +134,8 @@ public class Players  extends Thread implements Runnable{
                            
                                  this.writeClient("map "+ this.game.getMap().getLine()+ " "+ this.game.getMap().getColumn() );
                                  this.writeClient(this.game.getMap().getTab(this));
+                                 
+                                 this.envoieEquipe();
                              		
                                 // System.out.println("game created");
                             }
