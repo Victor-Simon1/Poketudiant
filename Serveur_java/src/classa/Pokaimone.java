@@ -99,6 +99,9 @@ public class Pokaimone {
 		this.attack1 = Attack.values()[random];
 	}
 	
+	public int makeDamage(int power,Pokaimone p){
+		return (float)(myRandom(90,101)/100) * this.att / p.getDef() * power;
+	}
 	private int make_attack1(Type def) {
 		if(this.attack1.type == Type.NOISY && def == Type.LAZY) {
 			return this.attack1.power *2;

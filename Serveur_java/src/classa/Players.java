@@ -90,14 +90,13 @@ public class Players  extends Thread implements Runnable{
                 	System.out.println("DEBUG1 : " + str);
                     if(str.contains("require game list")){//demande le nombre de game
                        // System.out.println("number of games 1");
-                       writer.println("number of games 0");
+                        this.writeClient("number of games "+this.serv.getListGame().size());
                         for(int nbgame = 0;nbgame <this.serv.getListGame().size();nbgame++){
                             game_info = game_info + this.serv.getListGame().get(nbgame).getNbPlayer() + " " +  this.serv.getListGame().get(nbgame).getName() + "\n"; 
                         }
                    // game_info = game_info + "3 12345678\n"; 
                     //game_info = game_info + "7 game2\n"; 
-                   
-                     //writer.println(game_info);
+                    if(this.serv.getListGame().size()>0)writer.println(game_info);
                      System.out.println(game_info);
                     
                     }
