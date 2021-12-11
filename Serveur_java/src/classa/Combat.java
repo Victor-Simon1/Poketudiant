@@ -64,7 +64,7 @@ public class Combat {
 		}
 		
 		
-		if(player1.getTeam().firstElement().getPv() == 0){
+		if(player1.getTeam().firstElement().isKO()){
 			if(player1.getTeam().getListe().get(1).getPv() == 0 &&player1.getTeam().getListe().get(1).getPv() ==0 ) {
 				this.player1.writeClient("encounter lose");
 				this.player2.writeClient("encounter win");
@@ -104,21 +104,29 @@ public class Combat {
 					this.player1.writeClient("encounter escape fail");
 				}
 			}
-			
+			this.putAttackPoke();
 		}
 		else if(this.actionP1 == "") {
 			this.player1.writeClient("encounter enter action");
 		}
 		
-		if(this.player1.getTeam().firstElement().getPv()== 0) {
-			if(this.player1.getTeam().getListe().get(1).getPv() == 0 &&this.player1.getTeam().getListe().get(2).getPv() == 0 ) {
-				
+		if(this.player1.getTeam().firstElement().isKO()) {
+			if(this.player1.getTeam().getListe().get(1).isKO() &&this.player1.getTeam().getListe().get(2).isKO() ) {
+				this.player1.writeClient("encounter lose");
+				this.player1.getTeam().getListe().forEach(n ->{
+					n.setPv(n.getPvMax());
+					n.setXp(n.getXp() - 0.2 * n.getXp());
+				});
+			
 			}
 		}
 	}
 	
 	public void putAttackPoke() {
-		
+		Pokaimone courant = this.player1.getTeam().firstElement();
+		int random = Function.myRandom(0, 100);
+		if(random < 50)courant.setPv(courant.getPv() - this.pok.make_attack1(courant.getType()));
+		else courant.setPv(courant.getPv() - this.pok.make_attack2(courant.getType()));
 	}
 	public Players getPlayer1() {
 		return player1;

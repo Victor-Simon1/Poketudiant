@@ -13,6 +13,7 @@ public class Pokaimone {
 	private int defense;
 	private int pvMax;
 	private int pv;
+	private boolean isKO;
 	private double xp;
 	private double xpMax;
 	private int lvl;
@@ -31,6 +32,7 @@ public class Pokaimone {
 		this.type = pType;
 		this.isCatchable = pIsCatchable;
 		this.evolution = pEvolution;
+		this.isKO = false;
 		//this.team = new Teams(this);
 		this.attaque = applyCoeff(pAttaque);
 		this.defense = applyCoeff(pDefense);
@@ -47,6 +49,22 @@ public class Pokaimone {
 
 	}
 	
+	public Teams getTeam() {
+		return team;
+	}
+
+	public void setTeam(Teams team) {
+		this.team = team;
+	}
+
+	public boolean isKO() {
+		return isKO;
+	}
+
+	public void setKO(boolean isKO) {
+		this.isKO = isKO;
+	}
+
 	public boolean isCatchable() {
 		return isCatchable;
 	}
@@ -294,7 +312,11 @@ public class Pokaimone {
 	}
 
 	public void setPv(int pv) {
-		this.pv = pv;
+		if(pv <= 0) {
+			this.pv = 0;
+			this.isKO = true;
+		}
+		else this.pv = pv;
 	}
 
 	public double getXpMax() {
