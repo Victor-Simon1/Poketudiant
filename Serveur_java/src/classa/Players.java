@@ -199,35 +199,7 @@ public class Players  extends Thread implements Runnable{
                     	else {
                     		
                     	}
-                    	/*
-                    	if(this.team.placeEns == x) {
-                    		this.team.placeEns = x-1;
-                    		if(this.team.placePok1 == x-1) {
-                    			this.team.placePok1 = x-1;
-                    		}
-                    		if(this.team.placePok2 == x-1) {
-                    			this.team.placePok2 = x-1;
-                    		}
-                    	}
-                    	else if(this.team.placePok1 == x) {
-                    		this.team.placePok1 = x-1;
-                    		if(this.team.placeEns == x-1) {
-                    			this.team.placeEns = x-1;
-                    		}
-                    		if(this.team.placePok2 == x-1) {
-                    			this.team.placePok2 = x-1;
-                    		}
-                    	}
-                    	else if(this.team.placePok2 == x) {
-                    		this.team.placePok2 = x-1;
-                    		if(this.team.placePok1 == x-1) {
-                    			this.team.placePok1 = x-1;
-                    		}
-                    		if(this.team.placeEns == x-1) {
-                    			this.team.placeEns = x-1;
-                    		}
-                    	}
-                    	*/
+                    	
                     }
                     else if(str.contains("poketudiant")&& str.contains("move down")) {
                     	info = str.split(" ");
@@ -244,94 +216,54 @@ public class Players  extends Thread implements Runnable{
                     }
                     else if(str.contains("encounter action attack1")) {
                     	if(this == this.combat.getPlayer1()) {
-                    		this.combat.setActionP1("attack1");
+                    		this.combat.setActionP1(str);
                     	}
                     	else {
-                    		this.combat.setActionp2("attack1");
+                    		this.combat.setActionp2(str);
                     	}
                     }
                     else if(str.contains("encounter action attack2")) {
                     	if(this == this.combat.getPlayer1()) {
-                    		this.combat.setActionP1("attack2");
+                    		this.combat.setActionP1(str);
                     	}
                     	else {
-                    		this.combat.setActionp2("attack2");
+                    		this.combat.setActionp2(str);
                     	}
                     }
                     else if(str.contains("ecounter action switch")) {
                     	if(this== this.combat.getPlayer1()) {
-                    		this.combat.setActionP1("switch");
+                    		this.combat.setActionP1(str);
                     	}
                     	else {
-                    		this.combat.setActionp2("switch");
+                    		this.combat.setActionp2(str);
                     	}
                     }
                     else if(str.contains("encounter action catch")) {
                     	if(this == this.combat.getPlayer1()) {
-                    		this.combat.setActionP1("catch");
+                    		this.combat.setActionP1(str);
                     	}
                     	else {
-                    		this.combat.setActionp2("catch");
+                    		this.combat.setActionp2(str);
                     	}
                     }
                     else if(str.contains("encounter action leave")) {
                     	if(this == this.combat.getPlayer1()) {
-                    		this.combat.setActionP1("leave");
+                    		this.combat.setActionP1(str);
                     	}
                     	else {
-                    		this.combat.setActionp2("leave");
+                    		this.combat.setActionp2(str);
                     	}
                     }
                     else if(str.contains("encounter poketudiant index")) {
                     	if(this == this.combat.getPlayer1()) {
-                    		this.combat.setActionP1("switch");
+                    		this.combat.setActionP1(str);
                     	}
                     	else {
-                    		this.combat.setActionP1("switch");
+                    		this.combat.setActionP1(str);
                     	}
                     }
                     
-                    else if(true){//contenu equipe
-                    	
-                    }
-                    /*
-                    else if(str.contains("encounter new wild")) {
-                    	
-                    }
-                    else if(str.contains("encounter new rival")) {
-                    	
-                    }
-                    else if(str.contains("encounter KO opponent")) {
-                    	
-                    }
-                    else if(str.contains("encounter KO player")) {
-                    	
-                    }
-                    else if(str.contains("encounter win")) {
-                    	
-                    }
-                    else if(str.contains("encounter lose")) {
-    	
-                    }
-                    else if(str.contains("encounter catch ok")) {
-    	
-                    }
-                    else if(str.contains("encounter catch fail")) {
-                    	
-                    }
-                    else if(str.contains("encounter escape ok")) {
-    	
-                    }
-                    else if(str.contains("encounter escape fail")) {
-                    	
-                    }
-                    else if(str.contains("encounter poketudiant xp ")) {
-                    	
-                    }
-                    else if(str.contains("encounter poketudiant ok")) {
-                    	
-                    }
-                    */
+                    
                 }
                 else {
                 //	System.out.println(str);
@@ -346,6 +278,16 @@ public class Players  extends Thread implements Runnable{
         }
         
     }
+	public Game getGame() {
+		return game;
+	}
+
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+
 	public Pokaimone getPokPrinc() {
 		return pokPrinc;
 	}

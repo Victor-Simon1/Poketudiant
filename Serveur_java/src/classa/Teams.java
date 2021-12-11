@@ -22,6 +22,16 @@ public class Teams {
 		this.liste.add(pok);
 		return true;
 	}
+	public ArrayList<Pokaimone> getListe(){
+		return this.liste;
+	}
+	public boolean supprPok(int index) {
+		if(index < 0 || index >this.liste.size() ) {
+			return false;
+		}
+		this.liste.remove(index);
+		return true;
+	}
 	public boolean  echanger(int posA,int posB) {
 		boolean estEchange = false;
 		if(posA <0  || posA> this.liste.size() -1 || posB<0 || posB>this.liste.size()-1) {

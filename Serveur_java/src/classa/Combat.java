@@ -51,11 +51,36 @@ public class Combat {
 			}
 			else if(this.actionP1.contains("switch") && this.actionp2.contains("switch")) {
 				
+				this.player1.writeClient("encounter enter action");
+				this.player2.writeClient("encounter enter action");
+				//this.player1.getTeam().echanger(info, posB);
+				//this.player2.getTeam().echanger(posA, posB);
 			}
+			
 		}
 		else if(this.actionP1 == ""&& this.actionp2 == "") {
 			this.player1.writeClient("encounter enter action");
 			this.player2.writeClient("encounter enter action");
+		}
+		
+		
+		if(player1.getTeam().firstElement().getPv() == 0){
+			if(player1.getTeam().getListe().get(1).getPv() == 0 &&player1.getTeam().getListe().get(1).getPv() ==0 ) {
+				this.player1.writeClient("encounter lose");
+				this.player2.writeClient("encounter win");
+			}
+			else {
+				
+			}
+		}
+		if(player2.getTeam().firstElement().getPv() == 0){
+			if(player2.getTeam().getListe().get(1).getPv() == 0 &&player2.getTeam().getListe().get(1).getPv() ==0 ) {
+				this.player1.writeClient("encounter win");
+				this.player2.writeClient("encounter lose");
+			}
+			else {
+				
+			}
 		}
 	}
 	
@@ -67,10 +92,28 @@ public class Combat {
 			else if(this.actionP1.contains("switch")) {
 				
 			}
+			else if(this.actionP1.contains("leave")) {
+				boolean leave = false;
+				leave = this.player1.getTeam().getListe().get(0).tentativeFuite(this.player2.getTeam().getListe().get(0));
+				if(leave) {
+					this.player1.getGame().getListCombat().remove(this.player1.getCombat());
+					
+					this.player1.writeClient("encounter escape ok");
+				}
+				else {
+					this.player1.writeClient("encounter escape fail");
+				}
+			}
+			
 		}
 		else if(this.actionP1 == "") {
 			this.player1.writeClient("encounter enter action");
-			this.player2.writeClient("encounter enter action");
+		}
+		
+		if(this.player1.getTeam().firstElement().getPv()== 0) {
+			if(this.player1.getTeam().getListe().get(1).getPv() == 0 &&this.player1.getTeam().getListe().get(2).getPv() == 0 ) {
+				
+			}
 		}
 	}
 	
