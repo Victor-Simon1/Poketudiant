@@ -8,7 +8,7 @@ public class Combat {
     private String actionP1;
     private String actionp2;
     private Pokaimone pok;
-    
+    private int XpTotal;
     public Combat(Players pokaimone, Players pokaimone2) {
 		// TODO Auto-generated constructor stub
 		this.player1 = pokaimone;
@@ -18,6 +18,7 @@ public class Combat {
 		// TODO Auto-generated constructor stub
 		this.player1 = pokaimone;
 		this.pok= pokaimone2;
+		this.XpTotal = 25;
 	}
 	public String getActionP1() {
 		return actionP1;
@@ -109,7 +110,17 @@ public class Combat {
 		else if(this.actionP1 == "") {
 			this.player1.writeClient("encounter enter action");
 		}
-		
+		if(this.pok.isKO()) {
+			this.player1.writeClient("encounter win");
+			this.player1.getTeam().getListe().forEach(n -> {
+				n.setXp(n.getXp() +(int)(this.XpTotal /3));
+				if(n.getPv() != n.getPvMax()) {
+					n.setPv(n.getPvMax());
+					n.setXp(n.getXp() - 0.2 * n.getXp());
+				}
+			});
+			
+		}
 		if(this.player1.getTeam().firstElement().isKO()) {
 			if(this.player1.getTeam().getListe().get(1).isKO() &&this.player1.getTeam().getListe().get(2).isKO() ) {
 				this.player1.writeClient("encounter lose");

@@ -102,7 +102,12 @@ public class Pokaimone {
 	}
 
 
-
+	public void passLvl() {
+		this.attaque += (int)(this.attaque *0.1);
+		this.defense += (int)(this.defense *0.1);
+		this.pvMax += (int)(this.pvMax *0.1);
+		this.pv = this.pvMax;
+	}
 	private int applyCoeff(int stats){
 		return (int)(0.9 + Math.random() *(1.1 -0.9)) * stats;
 	}

@@ -49,6 +49,7 @@ public class Game extends Thread {
 	public void run() {
 		for(;;) {
 			//this.listPlayers.forEach(n -> System.out.println(n.ge));
+			if(this.listPlayers.size() == 0)this.stop();
 			this.verifyPokaimone();
 			this.listCombat.forEach(n-> {
 				if(n.getPlayer2() == null) {

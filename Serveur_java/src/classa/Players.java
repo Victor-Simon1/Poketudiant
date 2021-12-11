@@ -81,7 +81,13 @@ public class Players  extends Thread implements Runnable{
     	
     	
     	for(int i = 0;i< this.team.liste.size();i++) {
-    		team += this.team.liste.get(i).getName() + this.team.liste.get(i).getType() + this.team.liste.get(i).getLvl() + this.team.liste.get(i).getXp() + this.team.liste.get(i).getXpMax() + this.team.liste.get(i).getPv() + this.team.liste.get(i).getPvMax() + this.team.liste.get(i).getAttaque() + this.team.liste.get(i).getDefense() + this.team.liste.get(i).getAttack1().name()+ this.team.liste.get(i).getAttack1().name(); 
+    		team += this.team.liste.get(i).getName() +" " + this.team.liste.get(i).getType() + " "+ 
+    				this.team.liste.get(i).getLvl() + " " +this.team.liste.get(i).getXp() + " " +
+    				(this.team.liste.get(i).getXpMax() -  this.team.liste.get(i).getXp())+ " "+
+    				this.team.liste.get(i).getPv() +  " "+ 
+    				this.team.liste.get(i).getPvMax() + " " +this.team.liste.get(i).getAttaque() + " "+
+    				this.team.liste.get(i).getDefense() + " " + this.team.liste.get(i).getAttack1().name()+ " " +
+    				this.team.liste.get(i).getAttack1().name() + "\n"; 
     	}
     
     	this.writeClient(team);
@@ -94,7 +100,7 @@ public class Players  extends Thread implements Runnable{
         try {
            /// writer.println("Connect");
             for(;;){
-            
+            	
                 //System.out.println("DEBUG : " + str);
                 str = reader.readLine();
                 
@@ -274,7 +280,13 @@ public class Players  extends Thread implements Runnable{
         }
         catch (IOException e) {
             // TODO Auto-generated catch block
-             e.printStackTrace();
+        	try {
+				s.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            e.printStackTrace();
         }
         
     }
