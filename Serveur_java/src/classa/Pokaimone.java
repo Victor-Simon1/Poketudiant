@@ -127,6 +127,10 @@ public class Pokaimone {
 				this.team.liste.get(i).getDefense() + this.team.liste.get(i).getAttack1().name()+ 
 				this.team.liste.get(i).getAttack1().name(); 
 	}
+	
+	public String infoPokOpponent(Pokaimone p) {
+		return "encounter poketudiant opponent " + p.getName() + " " + p.getLvl() + " " + (p.getPv() / p.getPvMax());
+	}
 	private void capturePokaimone(Pokaimone p) {
 		if(this.team.ajoutInTeam(p));
 		/*if(this.type == Type.TEACHER) {

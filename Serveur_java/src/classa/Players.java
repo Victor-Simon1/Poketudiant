@@ -200,25 +200,24 @@ public class Players  extends Thread implements Runnable{
                     	info = str.split(" ");
                     	int x = info[1].charAt(0);
                     	if(this.team.echanger(x, x-1) ) {
-                    		
+                    		this.envoieEquipe();
                     	}
-                    	else {
-                    		
-                    	}
+                    
                     	
                     }
                     else if(str.contains("poketudiant")&& str.contains("move down")) {
                     	info = str.split(" ");
                     	int x = info[1].charAt(0);
                     	if(this.team.echanger(x, x+1) ) {
-                    		
+                    		this.envoieEquipe();
                     	}
-                    	else {
-                    		
-                    	}
+                    
                     }
                     else if(str.contains("poketudiant")&& str.contains("free")) {
-                    	
+                    	info = str.split(" ");
+                    	int x = info[1].charAt(0);
+                    	this.team.freePok(x);
+                    	this.envoieEquipe();
                     }
                     else if(str.contains("encounter action attack1")) {
                     	if(this == this.combat.getPlayer1()) {
