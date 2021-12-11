@@ -96,6 +96,14 @@ public class Pokaimone {
 		}
 		return collide;
 	}
+	public String infoPok(int i) {
+		return this.team.liste.get(i).getName() + this.team.liste.get(i).getType() +
+				this.team.liste.get(i).getLvl() + this.team.liste.get(i).getXp() +
+				this.team.liste.get(i).getXpMax() + this.team.liste.get(i).getPv() + 
+				this.team.liste.get(i).getPvMax() + this.team.liste.get(i).getAttaque() + 
+				this.team.liste.get(i).getDefense() + this.team.liste.get(i).getAttack1().name()+ 
+				this.team.liste.get(i).getAttack1().name(); 
+	}
 	private void capturePokaimone(Pokaimone p) {
 		if(this.team.ajoutInTeam(p));
 		/*if(this.type == Type.TEACHER) {

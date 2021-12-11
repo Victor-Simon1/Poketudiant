@@ -20,6 +20,16 @@ public class Game extends Thread {
 	private int nbMaxPokaimone;
 	private ArrayList<Combat> listCombat;
 	
+	public ArrayList<Combat> getListCombat() {
+		return listCombat;
+	}
+
+	public void setListCombat(ArrayList<Combat> listCombat) {
+		this.listCombat = listCombat;
+	}
+
+
+
 	private Map map;
 	private Map mapPlayers;
 	//Constructeur
