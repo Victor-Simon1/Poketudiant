@@ -12,6 +12,14 @@ public class Teams {
 
 	}
 	
+	public void freePok(int index) {
+		if(!(index <0 || index> 2)) {
+			if(this.liste.get(index).getType() != Type.TEACHER) {
+				this.liste.remove(index);
+				
+			}
+		}
+	}
 	public Pokaimone firstElement() {
 		return this.liste.get(0);
 	}
@@ -20,6 +28,16 @@ public class Teams {
 			return false;
 		}
 		this.liste.add(pok);
+		return true;
+	}
+	public ArrayList<Pokaimone> getListe(){
+		return this.liste;
+	}
+	public boolean supprPok(int index) {
+		if(index < 0 || index >this.liste.size() ) {
+			return false;
+		}
+		this.liste.remove(index);
 		return true;
 	}
 	public boolean  echanger(int posA,int posB) {

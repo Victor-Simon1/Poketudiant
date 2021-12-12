@@ -13,6 +13,7 @@ public class Pokaimone {
 	private int defense;
 	private int pvMax;
 	private int pv;
+	private boolean isKO;
 	private double xp;
 	private double xpMax;
 	private int lvl;
@@ -31,6 +32,7 @@ public class Pokaimone {
 		this.type = pType;
 		this.isCatchable = pIsCatchable;
 		this.evolution = pEvolution;
+		this.isKO = false;
 		//this.team = new Teams(this);
 		this.attaque = applyCoeff(pAttaque);
 		this.defense = applyCoeff(pDefense);
@@ -47,6 +49,22 @@ public class Pokaimone {
 
 	}
 	
+	public Teams getTeam() {
+		return team;
+	}
+
+	public void setTeam(Teams team) {
+		this.team = team;
+	}
+
+	public boolean isKO() {
+		return isKO;
+	}
+
+	public void setKO(boolean isKO) {
+		this.isKO = isKO;
+	}
+
 	public boolean isCatchable() {
 		return isCatchable;
 	}
@@ -84,7 +102,12 @@ public class Pokaimone {
 	}
 
 
-
+	public void passLvl() {
+		this.attaque += (int)(this.attaque *0.1);
+		this.defense += (int)(this.defense *0.1);
+		this.pvMax += (int)(this.pvMax *0.1);
+		this.pv = this.pvMax;
+	}
 	private int applyCoeff(int stats){
 		return (int)(0.9 + Math.random() *(1.1 -0.9)) * stats;
 	}
@@ -95,6 +118,18 @@ public class Pokaimone {
 			collide = true;
 		}
 		return collide;
+	}
+	public String infoPok(int i) {
+		return this.team.liste.get(i).getName() + this.team.liste.get(i).getType() +
+				this.team.liste.get(i).getLvl() + this.team.liste.get(i).getXp() +
+				this.team.liste.get(i).getXpMax() + this.team.liste.get(i).getPv() + 
+				this.team.liste.get(i).getPvMax() + this.team.liste.get(i).getAttaque() + 
+				this.team.liste.get(i).getDefense() + this.team.liste.get(i).getAttack1().name()+ 
+				this.team.liste.get(i).getAttack1().name(); 
+	}
+	
+	public String infoPokOpponent(Pokaimone p) {
+		return "encounter poketudiant opponent " + p.getName() + " " + p.getLvl() + " " + (p.getPv() / p.getPvMax());
 	}
 	private void capturePokaimone(Pokaimone p) {
 		if(this.team.ajoutInTeam(p));
@@ -286,7 +321,11 @@ public class Pokaimone {
 	}
 
 	public void setPv(int pv) {
-		this.pv = pv;
+		if(pv <= 0) {
+			this.pv = 0;
+			this.isKO = true;
+		}
+		else this.pv = pv;
 	}
 
 	public double getXpMax() {

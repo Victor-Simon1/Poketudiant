@@ -20,6 +20,16 @@ public class Game extends Thread {
 	private int nbMaxPokaimone;
 	private ArrayList<Combat> listCombat;
 	
+	public ArrayList<Combat> getListCombat() {
+		return listCombat;
+	}
+
+	public void setListCombat(ArrayList<Combat> listCombat) {
+		this.listCombat = listCombat;
+	}
+
+
+
 	private Map map;
 	private Map mapPlayers;
 	//Constructeur
@@ -39,6 +49,7 @@ public class Game extends Thread {
 	public void run() {
 		for(;;) {
 			//this.listPlayers.forEach(n -> System.out.println(n.ge));
+			if(this.listPlayers.size() == 0)this.stop();
 			this.verifyPokaimone();
 			this.listCombat.forEach(n-> {
 				if(n.getPlayer2() == null) {
