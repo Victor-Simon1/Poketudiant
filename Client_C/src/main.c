@@ -162,6 +162,8 @@ int main(int argc, char **argv){
 
     SDL_DestroyTexture(imgFleche);  
     imgFleche = NULL;
+    SDL_DestroyTexture(imgFondCombat);  
+    imgFondCombat = NULL;
 
     SDL_DestroyTexture(herbeImg);  
     imgFleche = NULL;

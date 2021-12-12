@@ -11,14 +11,15 @@ Poketudiants createPoketudiant(){
     poke->x = 0;
     poke->y = 0;
     poke->xp = 0;
-    poke->lvl = 0;
+    poke->xpManquant = 0;
+    poke->lvl = 1;
     poke->nbPoke = 0;
     poke->timer = 0.5;
+    poke->enCbt = false;
     poke->suiv = NULL;
-
-    //Variete variete;
-    //Attaque listAtk[5];
-    //Type type;
+    poke->atk = 0;
+    poke->def = 0;
+    
 
  //   for(i=0; i < MAX_TEAM; i++){
     //    poke->team[i] = NULL;

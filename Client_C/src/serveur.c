@@ -23,7 +23,7 @@
 /*
 
     ================================================ GESTION DES ECRANS DE SELECTION DE SERVEURS/PARTIES ================================================
-
+lvl += nb
 */
 
 /*
@@ -195,11 +195,12 @@ int refresh(char texte[20]){
     
     // reset la liste des serveurs
     destroyServeurs(listeServeur);
-    listeServeur = createServeur("172.31.129.187");
+    //listeServeur = createServeur("172.31.129.187");
     //listeServeur = createServeur("172.31.129.188");
+    listeServeur = ajouterTeteServeur(listeServeur, createServeur("10.0.2.15"));
 
     listeTexte = destroyTextes(listeTexte);
-    listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.187", 150, 200));
+    listeTexte = ajouterTeteTexte(listeTexte, createTexte("10.0.2.15", 150, 200));
     //listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.188", 150, 250));
     nbServeur = 2;
 
@@ -324,10 +325,10 @@ int loadServeur(){
     groupeServeur->actif = false;
     
     // bouton refresh
-    Buttons ButtonRefresh = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
+    Buttons ButtonRefresh = creerBouton("src/gfx/boutonRefresh.png", "src/gfx/boutonRefreshHover.png", "src/gfx/boutonRefreshHover.png", 
                                                                                                 game.ecran.camera.w/2 , 
                                                                                                 game.ecran.camera.h/2 , 
-                                                                                                150, 50, 
+                                                                                                300, 50, 
                                                                                                 &refresh,
                                                                                                 "");
     
@@ -337,10 +338,10 @@ int loadServeur(){
     groupeServeur->listeButtons = ajouter_teteButton(groupeServeur->listeButtons , ButtonRefresh);// ajoute le bouton refresh au groupe
     
     // bouton menu
-    Buttons ButtonMenu = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
+    Buttons ButtonMenu = creerBouton("src/gfx/boutonMenu.png", "src/gfx/boutonMenuHover.png", "src/gfx/boutonMenuHover.png", 
                                                                                                 game.ecran.camera.w/2 , 
                                                                                                 game.ecran.camera.h/2 + 200, 
-                                                                                                150, 50, 
+                                                                                                300, 50, 
                                                                                                 &changeAffichage,
                                                                                                 "MENU");
     
@@ -350,10 +351,10 @@ int loadServeur(){
     groupeServeur->listeButtons = ajouter_teteButton(groupeServeur->listeButtons , ButtonMenu);// ajoute le bouton serveur au groupe
 
     // bouton join
-    Buttons ButtonJoin = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
+    Buttons ButtonJoin = creerBouton("src/gfx/boutonConnect.png", "src/gfx/boutonConnectHover.png", "src/gfx/boutonConnectHover.png", 
                                                                                                 game.ecran.camera.w/2, 
                                                                                                 game.ecran.camera.h/2 +100, 
-                                                                                                150, 50, 
+                                                                                                300, 50, 
                                                                                                 &joinServeur,
                                                                                                 "");
     
@@ -371,36 +372,6 @@ int loadServeur(){
 
 int updateServeur(){
 
-    // =========================== Gestion des events (clavier) ===============================
-/*
-    const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if(choose == true){
-        SDL_Log("true");
-        if (state[SDL_SCANCODE_UP]){ // HAUT
-            SDL_Log("haut");
-            if(choix > 0){
-                SDL_Log("moins");
-                choix--;
-            }
-            else{
-                choix = nbServeur;
-            }   
-        }
-        if (state[SDL_SCANCODE_DOWN]){ // BAS
-        SDL_Log("bas");
-            if(choix < nbServeur-1){
-                choix++;
-            }
-            else{
-                choix = 0;
-            }
-        }        
-    }
-    else{
-        SDL_Log("false");
-    }
-
-*/
     updateGui();
 
     return 1;   

@@ -6,6 +6,7 @@
 #define NB_ATTAQUE 13
 #define NB_TYPE 4
 
+#include <stdbool.h>
 
 typedef enum _Variete{
     parlfor, ismar, rigolamor, procrastino, couchtar, nuidebou, alabourre, buchafon, belmention, promomajor, enseignant_dresseur
@@ -24,15 +25,22 @@ typedef struct _poke{
     int maxVie;
     int x;
     int y;
+    int atk; 
+    int def;
     double xp;
+    double xpManquant;
     int lvl;
     double timer;
+    bool enCbt;
     struct _poke *team[MAX_TEAM];
     struct _poke *suiv;
     int nbPoke;
-    Variete variete;
-    Attaque listAtk[5];
-    Type type;
+    char *variete;
+    char *atk1;
+    char *atk2;
+    char *atk1Type;
+    char *atk2Type;
+    char *type;
 }Poketudiant, *Poketudiants;
 
 

@@ -40,15 +40,17 @@ int refreshGame(){
     }
     
     p = strtok(clientTCP->buffer_recv, sep);
-    if(!p){ // si plusieur msg
-        n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE);
-        clientTCP->buffer_recv[n]='\0';
-        printf("========== receive : %s\n", clientTCP->buffer_recv);
-        p = strtok(clientTCP->buffer_recv, sep);
-    }
-    
     // liste des games
-    if(nbGame > 0){
+    if(nbGame > 0){  
+        
+        if(!p){ // si plusieur msg
+            n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE);
+            clientTCP->buffer_recv[n]='\0';
+            printf("========== receive : %s\n", clientTCP->buffer_recv);
+            p = strtok(clientTCP->buffer_recv, sep);
+        }
+    
+
         for(i = 0; i<nbGame; i++){
             cpt = 0;
             while(p[cpt] != ' ' ){
@@ -189,10 +191,10 @@ int loadPartie(){
     groupePartie->actif = false;
     
     // bouton refresh
-    Buttons ButtonRefresh = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
+    Buttons ButtonRefresh = creerBouton("src/gfx/boutonRefresh.png", "src/gfx/boutonRefreshHover.png", "src/gfx/boutonRefreshHover.png", 
                                                                                                 game.ecran.camera.w/2 +100, 
                                                                                                 game.ecran.camera.h/2 +100, 
-                                                                                                150, 50, 
+                                                                                                300, 50, 
                                                                                                 &refreshGame,
                                                                                                 "");
     
@@ -201,11 +203,11 @@ int loadPartie(){
     
     groupePartie->listeButtons = ajouter_teteButton(groupePartie->listeButtons , ButtonRefresh);// ajoute le bouton refresh au groupe
     
-    // bouton menu
-    Buttons ButtonCreate = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
+    // bouton cree
+    Buttons ButtonCreate = creerBouton("src/gfx/boutonCreate.png", "src/gfx/boutonCreateHover.png", "src/gfx/boutonCreateHover.png", 
                                                                                                 game.ecran.camera.w/2 +100, 
                                                                                                 game.ecran.camera.h/2 +150, 
-                                                                                                150, 50, 
+                                                                                                300, 50, 
                                                                                                 &newPartie,
                                                                                                 "");
     
@@ -215,10 +217,10 @@ int loadPartie(){
     groupePartie->listeButtons = ajouter_teteButton(groupePartie->listeButtons , ButtonCreate);// ajoute le bouton serveur au groupe
 
     // bouton join
-    Buttons ButtonJoin = creerBouton("src/gfx/button_default.png", "src/gfx/button_pressed.png", "src/gfx/button_hover.png", 
+    Buttons ButtonJoin = creerBouton("src/gfx/boutonConnect.png", "src/gfx/boutonConnectHover.png", "src/gfx/boutonConnectHover.png", 
                                                                                                 game.ecran.camera.w/2 +100, 
                                                                                                 game.ecran.camera.h/2 +200, 
-                                                                                                150, 50, 
+                                                                                                300, 50, 
                                                                                                 &joinPartie,
                                                                                                 "");
     

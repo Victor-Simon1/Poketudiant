@@ -184,6 +184,35 @@ char** split(char* chaine,const char* delim,int vide){
     return tab;
 }
 
+void upLvl(int nb, int gain){
+    if(nb == 0)
+        player->lvl += nb;
+    else if(nb == 1)
+        player->team[0]->lvl += nb;
+    else
+        player->team[1]->lvl += nb;
+}
+
+void upXp(int nb, int gain){
+    if(nb == 0)
+        player->lvl += nb;
+    else if(nb == 1)
+        player->team[0]->lvl += nb;
+    else
+        player->team[1]->lvl += nb;
+}
+
+
+void upVariete(int nb, char *var){
+    if(nb == 0)
+        strcpy(player->variete, var);
+    else if(nb == 1)
+        strcpy(player->team[0]->variete, var);
+    else
+        strcpy(player->team[1]->variete, var);
+}
+
+
 
 int update(){
     
@@ -204,36 +233,29 @@ int update(){
     }
     
     if(ret == 0){// temps écoulé
-        SDL_Log("temps écoulé");
+        //SDL_Log("temps écoulé");
     }    
 
     if(FD_ISSET(clientTCP->socket, &rdfs)){// données recu
-            n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE-1);
-            clientTCP->buffer_recv[n] = '\0';
-            //printf("-----------receive : %s\n", clientTCP->buffer_recv);
+        n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE-1);
+        clientTCP->buffer_recv[n] = '\0';
+        //printf("-----------receive : %s\n", clientTCP->buffer_recv);
                     
-        }
-        else{
-            //SDL_Log("pas de msg");
-        }
-
-    
+    }
+    else{
+        //SDL_Log("pas de msg");
+    }
 
     // =========================== recoit un msg ===========================
     char *sep = "\n", *p, tempChar[150], *line, **tab, **tab2;
     int i=0, j=0, cpt=0;
     bool isMap = false;
-
-   // n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE);
-    //clientTCP->buffer_recv[n]='\0';
-    //printf("---------------- receive : %s\n", clientTCP->buffer_recv);
     
-    line = strtok(clientTCP->buffer_recv, sep);
-    tab2 = split(clientTCP->buffer_recv, "\n", 0);//split le buffer entier
-    //int tailleTab = (sizeof(tab2)/sizeof(tab2[0]));
+    line = strtok(clientTCP->buffer_recv, sep); // recup le 1ere ligne
+    //tab2 = split(clientTCP->buffer_recv, "\n", 0); // split le buffer entier
     
     while(line){
-        if(strlen(line) > 0){
+        //if(strlen(line) > 0){
             //SDL_Log("taille : %d", strlen(line));
 
         strcpy(tempChar, line); // save la ligne
@@ -245,16 +267,22 @@ int update(){
         }
 
         if(isMap){ // on recois un map
-            for(j=0; j<listeServeur->listePartie->nbColonne; j++){ // lecture de la ligne
-                //SDL_Log("ligne : %d, colonne : %d", i, j);
-                //SDL_Log("%c : ", tempChar[j]);
-                listeServeur->listePartie->map[i][j] = tempChar[j];
+            if(strlen(tempChar) == listeServeur->listePartie->nbColonne){
+                for(j=0; j<listeServeur->listePartie->nbColonne; j++){ // lecture de la ligne
+                    //SDL_Log("ligne : %d, colonne : %d", i, j);
+                    //SDL_Log("%c : ", tempChar[j]);
+                    listeServeur->listePartie->map[i][j] = tempChar[j];
+                }
+                i++;                
             }
-            i++;
+            else{
+                //SDL_Log("PROBLEME");
+            }
+
         }
         else{ // si autre message
-           // SDL_Log("autre");
-            tab = split(tempChar, " ", 0);//split la ligne
+            //SDL_Log("autre");
+            tab = split(tempChar, " ", 0); // split la ligne
 
             if(strncmp(tab[0],"map",3) == 0){ // reception de la map
                 listeServeur->listePartie->nbLigne = atoi(tab[1]); // ligne
@@ -264,19 +292,93 @@ int update(){
                 isMap = true;
             }
             else if(strncmp(tab[0],"team",4) == 0){// recoit ma liste de poketudiant
-                //SDL_Log("team");
-                // récupère le nombre de poketudiant
-
+                
+                player->nbPoke = atoi(tab[2]); // récupère le nombre de poketudiant
 
                 // récupère les poketudiants
+                line = strtok(NULL, sep);
+                strcpy(tempChar, line); // save la ligne
+                int i = 0;
+                for(i=0; i<player->nbPoke; i++){
+                    //SDL_Log("debut");
+                    tab = split(tempChar, " ", 0); // split la ligne
+                    Poketudiants temp;
+                    if(i == 0)
+                        temp = player;
+                    else if(i == 1)
+                        temp = player->team[0];
+                    else
+                        temp = player->team[1];
+
+                    temp->variete = tab[0];
+                    temp->type = tab[1];
+                    temp->lvl = atoi(tab[2]);
+                    temp->xp = atoi(tab[3]);
+                    temp->xpManquant = atoi(tab[4]);
+                    temp->maxVie = atoi(tab[5]);
+                    temp->atk = atoi(tab[6]);
+                    temp->def = atoi(tab[7]);
+                    temp->atk1 = tab[8];
+                    temp->atk1Type = tab[19];
+                    temp->atk2 = tab[10];
+                    temp->atk2Type = tab[11];
+                    //SDL_Log("fin");
+                    line = strtok(NULL, sep);
+                    if(line)
+                        strcpy(tempChar, line); // save la ligne
+                    //SDL_Log("fin2");
+                }
 
 
             }
-            else  if(strncmp(tab[0],"encounter new",13) == 0){
-                //SDL_Log("encounter");
-        
-                
+            else  if(strncmp(tab[0],"encounter",9) == 0){
 
+                    if(strncmp(tab[1],"KO",2) == 0){
+                        player->enCbt = true; // fin du combat
+                        if(strncmp(tab[2],"opponent",8) == 0){
+                            SDL_Log("pokétudiant adverse KO");
+                        }
+                        else{
+                            SDL_Log("player KO");
+                        }
+                    }
+                    else if(strncmp(tab[1],"win",3) == 0){
+                        SDL_Log("victoire");
+                    }
+                    else if(strncmp(tab[1],"lose",3) == 0){
+                        SDL_Log("défaite");
+                    }
+                    else if(strncmp(tab[1],"win",3) == 0){
+
+                    }
+                    else if(strncmp(tab[1],"catch",5) == 0){
+                        if(strncmp(tab[2],"ok",2) == 0){
+                            SDL_Log("capture réussit");
+                        }
+                        else{
+                            SDL_Log("échec de la capture");
+                        }
+
+                    }    
+                    else if(strncmp(tab[1],"escape",6) == 0){
+                        if(strncmp(tab[2],"ok",2) == 0){
+                            SDL_Log("fuite réussite");
+                        }
+                        else{
+                            SDL_Log("échec de la fuite");
+                        }
+                    }
+                    else if(strncmp(tab[1],"poketudiant",11) == 0){
+                        if(strncmp(tab[2],"xp",2) == 0){
+                            upXp(atoi(tab[3]), atoi(tab[4]));
+                        }
+                        else if(strncmp(tab[2],"level",5) == 0){
+                            upLvl(atoi(tab[3]), atoi(tab[4]));
+                        }
+                        else{
+                            upVariete(atoi(tab[3]), tab[4]);
+                        }
+                    }
             }
             else  if(strncmp(tab[0]," ",3) == 0){
                 // récupère le nombre de poketudiant
@@ -295,8 +397,9 @@ int update(){
         //int len = strlen(line);
         //SDL_Log("%d : ", len);
         cpt++;
+        SDL_Log("ici");
         line = strtok(NULL, sep);
-        }
+         SDL_Log("rip");
 
     }
 
@@ -382,39 +485,48 @@ int update(){
 int draw(){ // affichage du jeu
     SDL_RenderClear(game.ecran.renderer); // Efface l'écran
    
+    if(player->enCbt == false){
+        // =================================== affichage de la map ==============================
+            int x=0, y=0;
 
-    // =================================== affichage de la map ==============================
-        int x=0, y=0;
+            if(listeServeur->listePartie->nbLigne > 0 && listeServeur->listePartie->nbColonne > 0){
+                int startX = game.ecran.camera.x/SIZE_TILE, startY = game.ecran.camera.y/SIZE_TILE;
+                int nbLig = game.ecran.camera.h/SIZE_TILE, nbCol = game.ecran.camera.w/SIZE_TILE, i=0, j=0;
 
-        if(listeServeur->listePartie->nbLigne > 0 && listeServeur->listePartie->nbColonne > 0){
-            int startX = game.ecran.camera.x/SIZE_TILE, startY = game.ecran.camera.y/SIZE_TILE;
-            int nbLig = game.ecran.camera.h/SIZE_TILE, nbCol = game.ecran.camera.w/SIZE_TILE, i=0, j=0;
+                for(i=startX; i<startX+nbLig; i++){
+                    x=0;
+                    for(j=startY; j<startY+nbCol; j++){
+                        SDL_Rect Rect = {x, y, SIZE_TILE, SIZE_TILE};
+                        //SDL_Log("ligne : %d, colonne : %d", i, j);
+                        if(listeServeur->listePartie->map[i][j] == ' '){ // herbe
+                            SDL_RenderCopy(game.ecran.renderer,herbeImg,NULL,&Rect);
+                        }
+                        else if(listeServeur->listePartie->map[i][j] == '+'){ // soin
+                            SDL_RenderCopy(game.ecran.renderer,soinImg,NULL,&Rect);
+                        }
+                        else if(listeServeur->listePartie->map[i][j] == '*'){// buisson
+                            SDL_RenderCopy(game.ecran.renderer,buissonImg,NULL,&Rect);                        
+                        }
+                        else{
 
-            for(i=startX; i<startX+nbLig; i++){
-                x=0;
-                for(j=startY; j<startY+nbCol; j++){
-                    SDL_Rect Rect = {x, y, SIZE_TILE, SIZE_TILE};
-                    //SDL_Log("ligne : %d, colonne : %d", i, j);
-                    if(listeServeur->listePartie->map[i][j] == ' '){ // herbe
-                        SDL_RenderCopy(game.ecran.renderer,herbeImg,NULL,&Rect);
+                        }
+                        x += SIZE_TILE;
                     }
-                    else if(listeServeur->listePartie->map[i][j] == '+'){ // soin
-                        SDL_RenderCopy(game.ecran.renderer,soinImg,NULL,&Rect);
-                    }
-                    else if(listeServeur->listePartie->map[i][j] == '*'){// buisson
-                        SDL_RenderCopy(game.ecran.renderer,buissonImg,NULL,&Rect);                        
-                    }
-                    else{
-
-                    }
-                    x += SIZE_TILE;
+                    y += SIZE_TILE;
                 }
-                y += SIZE_TILE;
             }
-        }
-        else{
-            printf("no map\n");
-        }
+            else{
+                printf("no map\n");
+            }
+
+    }
+    else{ // en combat
+        SDL_Rect Rect = {0, 0, game.ecran.camera.w, game.ecran.camera.h};
+        SDL_RenderCopy(game.ecran.renderer,imgFondCombat,NULL,&Rect);
+
+
+    }
+
 
         
 

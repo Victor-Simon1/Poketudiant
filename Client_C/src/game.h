@@ -57,6 +57,7 @@ int choix;
 bool choose;
 
 SDL_Texture *imgFleche;// img fleche de selection
+SDL_Texture *imgFondCombat;// img fond combat
 
 SDL_Texture *herbeImg; // img herbe map
 SDL_Texture *soinImg; // img soin map

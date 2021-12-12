@@ -35,6 +35,7 @@ int load(){
 
    
    // ==================================== INITIALISATION VARIABLES ====================================
+    imgFondCombat = LoadTexture2(game.ecran.renderer,"src/gfx/battle_background.png");
 
     herbeImg = LoadTexture2(game.ecran.renderer,"src/gfx/herbe.png");
     soinImg = LoadTexture2(game.ecran.renderer,"src/gfx/soin.png");
