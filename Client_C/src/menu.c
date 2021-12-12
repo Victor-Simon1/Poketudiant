@@ -35,9 +35,9 @@ int loadMenu(){ // charge le menu
     groupeMenu->actif = true;
 
     Buttons ButtonServeur = creerBouton("src/gfx/boutonServeurs.png", "src/gfx/boutonServeurHover.png", "src/gfx/boutonServeurHover.png", 
-                                                                                                game.ecran.camera.w/2 -200, 
-                                                                                                game.ecran.camera.h/2 , 
-                                                                                                150, 50, 
+                                                                                                game.ecran.camera.w/2, 
+                                                                                                game.ecran.camera.h/3 , 
+                                                                                                300, 50, 
                                                                                                 &changeAffichage,
                                                                                                 "SERVEUR");
     
@@ -49,8 +49,8 @@ int loadMenu(){ // charge le menu
 
     Buttons quitButton = creerBouton("src/gfx/boutonQuitter.png", "src/gfx/boutonQuitterHover.png", "src/gfx/boutonQuitterHover.png", 
                                                                                                 ButtonServeur->box.x , 
-                                                                                                ButtonServeur->box.y+160 , 
-                                                                                                150, 50, 
+                                                                                                ButtonServeur->box.y+300 , 
+                                                                                                300, 50, 
                                                                                                 &changeAffichage,
                                                                                                 "QUIT");
 

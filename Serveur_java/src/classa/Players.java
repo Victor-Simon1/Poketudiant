@@ -76,7 +76,7 @@ public class Players  extends Thread implements Runnable{
     
     
     public void envoieEquipe() {
-    	String team = null;
+    	String team = "";
     	this.writeClient("team contains " + this.team.liste.size() );
     	
     	

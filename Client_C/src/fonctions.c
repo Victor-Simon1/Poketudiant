@@ -90,16 +90,6 @@ int eventClavier(){
 
 
 
-/*
-  _   _   ____    ____       _      _____   _____  
- | | | | |  _ \  |  _ \     / \    |_   _| | ____| 
- | | | | | |_) | | | | |   / _ \     | |   |  _|   
- | |_| | |  __/  | |_| |  / ___ \    | |   | |___  
-  \___/  |_|     |____/  /_/   \_\   |_|   |_____| 
-                                                  
-*/
-
-
 int lireNB(char *msg){
     int nb = 0, i=0;
     char* subtext;
@@ -212,6 +202,16 @@ void upVariete(int nb, char *var){
         strcpy(player->team[1]->variete, var);
 }
 
+/*
+  _   _   ____    ____       _      _____   _____  
+ | | | | |  _ \  |  _ \     / \    |_   _| | ____| 
+ | | | | | |_) | | | | |   / _ \     | |   |  _|   
+ | |_| | |  __/  | |_| |  / ___ \    | |   | |___  
+  \___/  |_|     |____/  /_/   \_\   |_|   |_____| 
+                                                  
+*/
+
+
 
 
 int update(){
@@ -226,24 +226,26 @@ int update(){
     FD_ZERO(&rdfs);
     FD_SET(clientTCP->socket, &rdfs);
     
-    // reception
-    if((ret = select(clientTCP->socket + 1, &rdfs, NULL, NULL, &time)) < 0){ // attente de réponse des serveurs
-        perror("select()");
-        //exit(errno);
-    }
-    
-    if(ret == 0){// temps écoulé
-        //SDL_Log("temps écoulé");
-    }    
+    if(strcmp(clientTCP->buffer_recv, " ") == 0){
+        // reception
+        if((ret = select(clientTCP->socket + 1, &rdfs, NULL, NULL, &time)) < 0){ // attente de réponse des serveurs
+            perror("select()");
+            //exit(errno);
+        }
+        
+        if(ret == 0){// temps écoulé
+            //SDL_Log("temps écoulé");
+        }    
 
-    if(FD_ISSET(clientTCP->socket, &rdfs)){// données recu
-        n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE-1);
-        clientTCP->buffer_recv[n] = '\0';
-        //printf("-----------receive : %s\n", clientTCP->buffer_recv);
-                    
-    }
-    else{
-        //SDL_Log("pas de msg");
+        if(FD_ISSET(clientTCP->socket, &rdfs)){// données recu
+            n = clientTCP->client_receive(clientTCP, clientTCP->buffer_recv, SIZE-1);
+            clientTCP->buffer_recv[n] = '\0';
+            printf("-----------receive : %s\n", clientTCP->buffer_recv);
+                        
+        }
+        else{
+            SDL_Log("pas de msg");
+        }        
     }
 
     // =========================== recoit un msg ===========================
@@ -251,15 +253,13 @@ int update(){
     int i=0, j=0, cpt=0;
     bool isMap = false;
     
-    line = strtok(clientTCP->buffer_recv, sep); // recup le 1ere ligne
-    //tab2 = split(clientTCP->buffer_recv, "\n", 0); // split le buffer entier
+    //line = strtok(clientTCP->buffer_recv, sep); // recup le 1ere ligne
     
-    while(line){
-        //if(strlen(line) > 0){
-            //SDL_Log("taille : %d", strlen(line));
-
+   // while(line){
+    for(line = strtok(clientTCP->buffer_recv, sep); line; line = strtok(NULL, sep)){
         strcpy(tempChar, line); // save la ligne
-       // SDL_Log("==== ligne lu : %s", tempChar);
+        SDL_Log("==== ligne lu : %s", tempChar);
+        //SDL_Log("==== ligne lu2 : %s", line[1]);
 
         if(i >= listeServeur->listePartie->nbLigne){
             isMap = false;
@@ -394,12 +394,7 @@ int update(){
 
         }
 
-        //int len = strlen(line);
-        //SDL_Log("%d : ", len);
-        cpt++;
-        SDL_Log("ici");
-        line = strtok(NULL, sep);
-         SDL_Log("rip");
+        
 
     }
 
