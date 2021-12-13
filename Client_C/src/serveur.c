@@ -93,11 +93,11 @@ int refresh(char texte[20]){
     //listeServeur = createServeur("172.31.129.187");
     //listeServeur = createServeur("172.31.129.188");
     
-    listeServeur = ajouterTeteServeur(listeServeur, createServeur("172.31.129.187"));
+    listeServeur = ajouterTeteServeur(listeServeur, createServeur("10.0.2.15"));
     listeServeur = ajouterTeteServeur(listeServeur, createServeur("172.31.129.188"));
 
     listeTexte = destroyTextes(listeTexte);
-    listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.187", 150, 200));
+    listeTexte = ajouterTeteTexte(listeTexte, createTexte("10.0.2.15", 150, 200));
 
     listeTexte = ajouterTeteTexte(listeTexte, createTexte("172.31.129.188", 150, 250));
     nbServeur = 2;
@@ -239,7 +239,7 @@ int loadServeur(){
     // bouton menu
     Buttons ButtonMenu = creerBouton("src/gfx/boutonMenu.png", "src/gfx/boutonMenuHover.png", "src/gfx/boutonMenuHover.png", 
                                                                                                 game.ecran.camera.w/4 +350, 
-                                                                                                game.ecran.camera.h -100, 
+                                                                                                game.ecran.camera.h -300, 
                                                                                                 300, 50, 
                                                                                                 &changeAffichage,
                                                                                                 "MENU");
@@ -252,7 +252,7 @@ int loadServeur(){
     // bouton join
     Buttons ButtonJoin = creerBouton("src/gfx/boutonConnect.png", "src/gfx/boutonConnectHover.png", "src/gfx/boutonConnectHover.png", 
                                                                                                 game.ecran.camera.w/4, 
-                                                                                                game.ecran.camera.h -100, 
+                                                                                                game.ecran.camera.h -300, 
                                                                                                 300, 50, 
                                                                                                 &joinServeur,
                                                                                                 "");

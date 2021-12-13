@@ -398,7 +398,7 @@ int update(){
 
     }
 
-
+    //strcpy(clientTCP->buffer_recv, " ");
     // =========================== Gestion des events (clavier) ===============================
 
     if(player->timer > 0){
@@ -503,7 +503,7 @@ int draw(){ // affichage du jeu
                             SDL_RenderCopy(game.ecran.renderer,buissonImg,NULL,&Rect);                        
                         }
                         else{
-
+                            SDL_RenderCopy(game.ecran.renderer,player1Img,NULL,&Rect);
                         }
                         x += SIZE_TILE;
                     }
